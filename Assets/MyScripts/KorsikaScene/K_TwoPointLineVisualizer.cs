@@ -2,6 +2,7 @@ using System;
 using Mapbox.Unity.Map;
 using Mapbox.Utils;
 using Npgsql.Replication.PgOutput.Messages;
+using NUnit.Framework;
 using UnityEngine;
 
 /*
@@ -20,6 +21,7 @@ public class K_TwoPointLineVisualizer : ITwoPointVisualization
     private GameObject linePrefab;
     private AbstractMap _map;
     private Transform mapRoot;
+    public static Transform globalMapRoot;
 
     // Instances
     private CustomPoint startCustomPoint;
@@ -72,7 +74,7 @@ public class K_TwoPointLineVisualizer : ITwoPointVisualization
         endCustomPoint = new CustomPoint(endPointInstance, _leg.worldEndPoint);*/
 
         GameObject lineInstance = GameObject.Instantiate(linePrefab);
-        lineInstance.transform.SetParent(mapRoot);
+        //lineInstance.transform.SetParent(mapRoot);
         fadeLine = new FadeLine(_leg.id, lineInstance, _leg.worldStartPoint, _leg.worldEndPoint);
         Vector2d origin = new Vector2d(_leg.origin_lat, _leg.origin_lon);
         Vector2d dest = new Vector2d(_leg.dest_lat, _leg.dest_lon);
@@ -93,6 +95,7 @@ public class K_TwoPointLineVisualizer : ITwoPointVisualization
 
             if(informationPanel.Instance != null) informationPanel.Hide();
             isSelected = false;
+            fadeLine.SetSelected(isSelected);
         }
     }
 
@@ -106,7 +109,8 @@ public class K_TwoPointLineVisualizer : ITwoPointVisualization
             //endCustomPoint.SetSelected(isSelected);
             fadeLine.SetSelected(isSelected);
 
-            //.Show(interactionPos, CustomHeadTracking.GetHeadPosition());
+            if(isSelected) informationPanel.Show(interactionPos, CustomHeadTracking.GetHeadPosition());
+            else informationPanel.Hide();
         }
     }
 

@@ -3,41 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public delegate void NewCommentBoxCreated(GameObject commentBox);
+public delegate void NewCommentBoxCreated();
 
-public class DrawCommentBox : MonoBehaviour
+public class DrawCommentBox
 {
     
-    [SerializeField] Button enableDrawBoxButton;
-    [SerializeField] GameObject commentBoxPrefab;
     
-    public NewCommentBoxCreated OnNewCommentBoxCreated;
+    static GameObject commentBoxPrefab;
+    
+    public static NewCommentBoxCreated OnNewCommentBoxCreated;
 
-    private GameObject currentBoxInstance;
-    private Vector3 currentBoxStart;
+    public static GameObject currentBoxInstance;
+    static Vector3 currentBoxStart;
 
-    void Start()
-    {   
+    public static void Initialize()
+    {
         InputEventsInvoker.InputEventTypes.HandSingleIPinchStartDrawBox += OnDrawBoxStart;
         InputEventsInvoker.InputEventTypes.HandSingleInputContDrawBox += OnDrawBoxCont;
         InputEventsInvoker.InputEventTypes.InputFinished += OnInputFinished;
-        enableDrawBoxButton.onClick.AddListener(OnEnableDrawBoxButtonClicked);
     }
 
-    private void OnInputFinished()
-    {
-        if(currentBoxInstance != null) OnNewCommentBoxCreated?.Invoke(currentBoxInstance);
-        currentBoxInstance = null;
-    }
-
-    private void OnEnableDrawBoxButtonClicked()
+    private static void OnInputFinished()
     {   
+        if(currentBoxInstance != null)
+        {   
+            OnNewCommentBoxCreated?.Invoke();
+        }
+    }
+
+    public static void StartDrawingBox(GameObject commentBoxPrefab)
+    {   
+        DrawCommentBox.commentBoxPrefab = commentBoxPrefab;
         currentBoxInstance = null;
         currentBoxStart = Vector3.zero;
         InputEventsInvoker.isDrawBoxActive = true;
     }
 
-    private void OnDrawBoxStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    private static void OnDrawBoxStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
     {
 #if UNITY_EDITOR
         currentBoxStart = interactionPos;
@@ -48,7 +50,7 @@ public class DrawCommentBox : MonoBehaviour
         currentBoxInstance = GameObject.Instantiate(commentBoxPrefab);
     }
 
-    private void OnDrawBoxCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    private static void OnDrawBoxCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
     {
 #if UNITY_EDITOR
         Vector3 diff = interactionPos - currentBoxStart;

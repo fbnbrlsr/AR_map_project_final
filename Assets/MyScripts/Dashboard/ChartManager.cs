@@ -1,10 +1,6 @@
 using UnityEngine;
 using XCharts.Runtime;
 
-
-// TODO: Add legend and adjust title
-
-
 public class ChartManager
 {   
     private BarChart barChart;
@@ -55,13 +51,10 @@ public class ChartManager
 
         barChart.RefreshChart();
         barChart.AnimationFadeIn();
-
-
     }
 
     void ConfigureBarChart()
     {   
-        Debug.Log("Changing chart configuration");
         foreach(Serie s in barChart.series)
         {
             s.animation.fadeIn.duration = 100f;

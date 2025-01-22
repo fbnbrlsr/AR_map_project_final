@@ -4,6 +4,7 @@ using System.Reflection.Emit;
 using Mapbox.Examples;
 using Mapbox.Unity.Map;
 using UnityEngine;
+using UnityEngine.Jobs;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 

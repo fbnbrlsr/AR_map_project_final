@@ -1,11 +1,11 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PathSelection : MonoBehaviour
 {
     [SerializeField] Material highlightMaterial;
-    [SerializeField] GameObject deselectAllPathsButton;
+    [SerializeField] Button deselectAllPathsButton;
 
     private Dictionary<GameObject, Material> selectedPaths;
 
@@ -13,6 +13,8 @@ public class PathSelection : MonoBehaviour
     void Start()
     {
         InputEventsInvoker.InputEventTypes.HandSingleIPinchStart += OnInputStart;
+
+        deselectAllPathsButton.onClick.AddListener(OnDeselectAllPathsButtonPressed);
 
         selectedPaths = new Dictionary<GameObject, Material>();
     }
@@ -22,10 +24,6 @@ public class PathSelection : MonoBehaviour
         if(targetObj.name.Contains("FadeLine"))
         {   
             OnLineSelected(targetObj);
-        }
-        if(targetObj.transform.IsChildOf(deselectAllPathsButton.transform))
-        {
-            OnDeselectAllPathsButtonPressed();
         }
     }
 
@@ -45,14 +43,12 @@ public class PathSelection : MonoBehaviour
 
         if(selectedPaths.ContainsKey(obj))
         {   
-            Debug.Log("Line already selected");
             Material initMat = selectedPaths[obj];
             obj.GetComponent<MeshRenderer>().material = initMat;
             selectedPaths.Remove(obj);
         }
         else
         {   
-            Debug.Log("Line not yet selected");
             Material initMat = obj.GetComponent<MeshRenderer>().material;
             selectedPaths.Add(obj, initMat);
             obj.GetComponent<MeshRenderer>().material = highlightMaterial;

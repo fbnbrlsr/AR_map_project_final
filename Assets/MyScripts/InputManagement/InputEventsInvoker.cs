@@ -162,7 +162,7 @@ public class InputEventsInvoker : MonoBehaviour
 
             if(touchData0.targetObject != null && !hasDoubleInitialValue)
             {
-                _inputEventTypes.InvokeHandDoubleInputStart(touchData0.inputDevicePosition, touchData0.inputDeviceRotation, 
+                _inputEventTypes.InvokeHandDoubleInputStart(touchData0.inputDevicePosition, touchData0.inputDeviceRotation,
                                            touchData1.inputDevicePosition, touchData1.inputDeviceRotation, touchData0.targetObject);
                 //Debug.Log("[InputEventsInvoker] Double hand input: Start");
                 hasDoubleInitialValue = true;

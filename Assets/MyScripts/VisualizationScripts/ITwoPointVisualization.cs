@@ -1,3 +1,5 @@
+using UnityEngine;
+
 interface ITwoPointVisualization
 {
     public void SetLegData(ILegData leg);

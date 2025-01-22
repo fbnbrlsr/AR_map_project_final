@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using XCharts.Runtime;
@@ -6,7 +7,7 @@ using XCharts.Runtime;
 public class DashboardManager : MonoBehaviour
 {   
     [SerializeField] BarChart barChart;
-    [SerializeField] Button changeDataButton;
+    [SerializeField] TMP_Text totalLegCountText;
 
     private ChartManager chartManager;
     
@@ -14,13 +15,7 @@ public class DashboardManager : MonoBehaviour
     {
         chartManager = new ChartManager();
         chartManager.SetBarChart(barChart);
-
-        changeDataButton.onClick.AddListener(OnChangeDataButtonClicked);
-    }
-
-    private void OnChangeDataButtonClicked()
-    {
-        
+        totalLegCountText.text = "Total: 0";
     }
 
     public void UpdateDatasetChart(List<K_DatabaseLegData> filteredData)
@@ -30,9 +25,11 @@ public class DashboardManager : MonoBehaviour
         int[] walkCount = new int[24];
         int[] carPassengerCount = new int[24];
         int[] ptCount = new int[24];
+        int totalLegCount = 0;
 
         foreach(K_DatabaseLegData leg in filteredData)
         {   
+            totalLegCount += 1;
             int hour = ((int) leg.departure_time) % 86400 / 3600;
             switch(leg.travel_mode)
             {
@@ -58,7 +55,7 @@ public class DashboardManager : MonoBehaviour
         }
 
         chartManager.UpdateData(carCount, bikeCount, walkCount, carPassengerCount, ptCount);
-
+        totalLegCountText.text = "Total: " + totalLegCount;
     }
 
 

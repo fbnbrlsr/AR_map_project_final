@@ -37,9 +37,12 @@ public class CustomMapPan : MonoBehaviour
 
             if(deltaPosition.magnitude > .1f) return;
 
-            Vector2d deltaPan = Conversions.MetersToLatLon(new Vector2d(deltaPosition.x * panMultiplier, deltaPosition.z * panMultiplier));
+            float sinTileAngle = -Mathf.Sin(MapTilting.tiltAngleRad);
+            float delta_yz = sinTileAngle * deltaPosition.y + (1 - sinTileAngle) * deltaPosition.z;
 
-            _map.UpdateMap(_map.CenterLatitudeLongitude + deltaPan, _map.Zoom);
+            Vector2d deltaPan = Conversions.MetersToLatLon(new Vector2d(deltaPosition.x * panMultiplier, delta_yz * panMultiplier));
+
+            if(deltaPan.magnitude > 0f) _map.UpdateMap(_map.CenterLatitudeLongitude + deltaPan, _map.Zoom);
             inputStartPos = fingerPos;
         }
     }

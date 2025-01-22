@@ -1,27 +1,22 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ResetScene : MonoBehaviour
 {
-    [SerializeField] GameObject sceneResetButtonGO;
+    [SerializeField] Button sceneResetButtonGO;
 
     private InputEventTypes inEvents;
 
     void Start()
     {   
-        inEvents = InputEventsInvoker.InputEventTypes;
-        if(inEvents != null)
-        {
-            inEvents.HandSingleIPinchStart += OnResetSceneButtonPressed;
-        }
+        sceneResetButtonGO.onClick.AddListener(OnResetSceneButtonPressed);
     }
 
-    void OnResetSceneButtonPressed(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    void OnResetSceneButtonPressed()
     {   
-        if(targetObj.transform.IsChildOf(sceneResetButtonGO.transform))
-        {
-            DebugPanel.ResetText();
-            SceneManager.LoadScene("MapScene");
-        }
+        DebugPanel.ResetText();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+    
 }

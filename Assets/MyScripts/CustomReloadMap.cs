@@ -7,6 +7,7 @@ namespace Mapbox.Examples
 	using System;
 	using System.Collections;
     using Mapbox.Utils;
+    using System.Xml;
 
     public class CustomReloadMap : MonoBehaviour
 	{
@@ -14,11 +15,7 @@ namespace Mapbox.Examples
 		Vector3 _cameraStartPos;
 		static AbstractMap _map;
 
-		[SerializeField]
 		ForwardGeocodeUserInput _forwardGeocoder;
-
-		[SerializeField]
-		Slider _zoomSlider;
 
 		private HeroBuildingSelectionUserInput[] _heroBuildingSelectionUserInput;
 
@@ -27,10 +24,11 @@ namespace Mapbox.Examples
 		WaitForSeconds _wait;
 
 		// My stuff
+		[SerializeField] Slider _zoomSlider;
+		[SerializeField] Slider zoomSensitivitySlider;
 		[SerializeField] GameObject mapParentObject;
-		InputEventTypes inEvents;
 		private float initHandDistance;
-		private float initMapZoom;
+		float zoomSensitivity;
 
 		void Awake()
 		{	
@@ -48,6 +46,11 @@ namespace Mapbox.Examples
 				_zoomSlider.onValueChanged.AddListener(Reload);
 				_zoomSlider.value = _map.Zoom;
 			}
+			if (zoomSensitivitySlider != null)
+			{	
+				zoomSensitivity = zoomSensitivitySlider.value;
+				zoomSensitivitySlider.onValueChanged.AddListener(ChangeZoomSensitivity);
+			}
 			if(_forwardGeocoder != null)
 			{
 				_forwardGeocoder.OnGeocoderResponse += ForwardGeocoder_OnGeocoderResponse;
@@ -63,14 +66,10 @@ namespace Mapbox.Examples
 			_wait = new WaitForSeconds(.0f);
 		}
 
-		void Start()
+        void Start()
 		{
-			inEvents = InputEventsInvoker.InputEventTypes;
-			if(inEvents != null)
-			{
-				inEvents.HandDoubleInputStart += OnHandZoomStart;
-				inEvents.HandDoubleInputCont += OnHandZoomCont;
-			}
+			InputEventsInvoker.InputEventTypes.HandDoubleInputStart += OnHandZoomStart;
+			InputEventsInvoker.InputEventTypes.HandDoubleInputCont += OnHandZoomCont;
 			initHandDistance = 1f;
 		}
 
@@ -114,13 +113,16 @@ namespace Mapbox.Examples
 			_reloadRoutine = null;
 		}
 
+		private void ChangeZoomSensitivity(float val)
+        {
+            zoomSensitivity = val;
+        }
 
 		public void OnHandZoomStart(Vector3 pos0, Quaternion rot0, Vector3 pos1, Quaternion rot1, GameObject targetObj)
 		{	
 			if(targetObj.transform.IsChildOf(mapParentObject.transform))
 			{
 				initHandDistance = Vector3.Distance(pos0, pos1);
-				initMapZoom = _map.Zoom;
 			}
 		}
 
@@ -128,8 +130,38 @@ namespace Mapbox.Examples
 		{	
 			if(targetObj.transform.IsChildOf(mapParentObject.transform))
 			{
-				float zoomFactor = Vector3.Distance(pos0, pos1) / initHandDistance;			// TODO: adjust zoom speed
-				_map.UpdateMap(_map.CenterLatitudeLongitude, initMapZoom * zoomFactor);
+				float currDistance = Vector3.Distance(pos0, pos1);
+				float deltaRatio = currDistance / initHandDistance;
+				deltaRatio = 1f + (deltaRatio - 1f) * zoomSensitivity;
+				initHandDistance = currDistance;
+
+				if(Mathf.Abs(deltaRatio - 1f) > .1f) return;
+
+				_map.UpdateMap(_map.CenterLatitudeLongitude, _map.Zoom * deltaRatio);
+
+
+				// Maybe try if this is a better solution (absolute distances between new and old finger positions instead of a ratio)
+				/*float currentTouchDistance = Vector2.Distance(pos0, pos1);
+				float previousTouchDistance = Vector2.Distance(prevPos0, prevPos1);
+				float deltaDistance = currentTouchDistance - previousTouchDistance;
+
+				prevPos0 = pos0;
+				prevPos1 = pos1;
+
+				if(Mathf.Abs(deltaDistance) > .5f) return;
+
+				if(displayCounter % 10 == 0)
+				{
+					DebugPanel.Log(" > deltaDist: " + deltaDistance);
+					displayCounter = 0;
+				}
+				displayCounter += 1;
+
+				_map.UpdateMap(_map.CenterLatitudeLongitude, _map.Zoom + deltaDistance);*/
+
+
+
+
 			}
 		}
 

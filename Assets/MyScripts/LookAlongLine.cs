@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Mapbox.Unity.Map;
-using Mapbox.Unity.Utilities;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LookAlongLine : MonoBehaviour
 {
@@ -12,8 +7,8 @@ public class LookAlongLine : MonoBehaviour
     [SerializeField] GameObject mapReferenceCube;
     [SerializeField] GameObject touchPointIndicatorPrefab;
     [SerializeField] Transform mapRootTransform;
-    [SerializeField] GameObject jumpToPointButton;
-    [SerializeField] GameObject resetMapPositionButton;
+    [SerializeField] Button jumpToPointButton;
+    [SerializeField] Button resetViewPositionButton;
 
     GameObject touchPointIndicator;
     Vector3 initialMapPosition;
@@ -24,7 +19,9 @@ public class LookAlongLine : MonoBehaviour
     void Start()
     {
         InputEventsInvoker.InputEventTypes.HandSingleIPinchStart += OnTouchInputStart;
-        //InputEventsInvoker.InputEventTypes.HandSingleInputCont += OnTouchInputCont;
+
+        jumpToPointButton.onClick.AddListener(OnJumpButtonPressed);
+        resetViewPositionButton.onClick.AddListener(OnResetViewPositionButtonPressed);
         
         initialMapPosition = mapRootTransform.position;
         moveToPoint = false;
@@ -32,30 +29,6 @@ public class LookAlongLine : MonoBehaviour
 
     void OnTouchInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
     {   
-        // Jump to point if a position has been selected
-        if(targetObj.transform.IsChildOf(jumpToPointButton.transform))
-        {   
-            if(touchPointIndicator == null)
-            {
-                Debug.LogError("ERROR: Cannot jump to point, no location has been chosen");
-                NotificationPopup popupWindow = new NotificationPopup();
-                popupWindow.Show("First select a point where you want to jump to.");
-                return;
-            }
-            
-            OnJumpButtonPressed(touchPointIndicator.transform.position);
-
-            GameObject.Destroy(touchPointIndicator);
-            return;
-        }
-
-        // Restore initial map position
-        if(targetObj.transform.IsChildOf(resetMapPositionButton.transform))
-        {
-            OnResetButtonPressed();
-            return;
-        }
-
         if(touchPointIndicator != null)
         {
             GameObject.Destroy(touchPointIndicator);
@@ -70,17 +43,25 @@ public class LookAlongLine : MonoBehaviour
         }
     }
 
-    void OnJumpButtonPressed(Vector3 selectedPos)
-    {
-        //Vector3 diffVector = CustomHeadTracking.GetHeadPosition() - selectedPos;
-        //mapRootTransform.position += diffVector;
+    void OnJumpButtonPressed()
+    {   
+        if(touchPointIndicator == null)
+        {
+            Debug.LogError("ERROR: Cannot jump to point, no location has been chosen");
+            NotificationPopup popupWindow = new NotificationPopup();
+            popupWindow.Show("First select a point where you want to jump to.");
+            return;
+        }
 
+        Vector3 selectedPos = touchPointIndicator.transform.position;
         Vector3 translationVector = CustomHeadTracking.GetHeadPosition() - selectedPos;
         targetPoint = mapRootTransform.position + translationVector;
         moveToPoint = true;
+
+        GameObject.Destroy(touchPointIndicator);
     }
 
-    void OnResetButtonPressed()
+    void OnResetViewPositionButtonPressed()
     {
         targetPoint = initialMapPosition;
         moveToPoint = true;

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5891799252542090581}
   - component: {fileID: 7253902094581184844}
   m_Layer: 0
-  m_Name: CommentCube
+  m_Name: CommentBoxPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

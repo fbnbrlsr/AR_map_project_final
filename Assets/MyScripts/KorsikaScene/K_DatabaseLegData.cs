@@ -1,14 +1,9 @@
-using System;
 using System.ComponentModel;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Mapbox.Examples;
-using Mapbox.Json.Schema;
-using Mapbox.Map;
 using Mapbox.Unity.Map;
 using Mapbox.Utils;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
+using Mapbox.Unity.Utilities;
 
 public class K_DatabaseLegData : ILegData
 {   
@@ -27,6 +22,7 @@ public class K_DatabaseLegData : ILegData
     public static AbstractMap _map;
     public static int nof_timeCategories = 6;
     public static bool projectOnTimePlane = false;
+    public static float initAbsoluteDistance;
 
     // Fields present in the database, fields that were null have special values
     public int person_id;
@@ -117,21 +113,38 @@ public class K_DatabaseLegData : ILegData
     {   
         absoluteDistance = CustomReloadMap.GetReferenceDistance();
 
-        // Start point
         Vector3 startPlanePos = CalculateWorldPlaneCoordinates(origin_lat, origin_lon);
         float startHeight = CalculateWorldHeight(departure_time);
         worldStartPoint = startPlanePos + Vector3.up * startHeight;
 
-        // End point
         Vector3 endPlanePos = CalculateWorldPlaneCoordinates(dest_lat, dest_lon);
         float endHeight = CalculateWorldHeight(departure_time + travel_time);
         worldEndPoint = endPlanePos + Vector3.up * endHeight;
+
+        float tiltAngle = MapTilting.tiltAngleRad;
+        worldStartPoint = RotateByAngle(worldStartPoint, tiltAngle);
+        worldEndPoint = RotateByAngle(worldEndPoint, tiltAngle);
+    }
+
+    private Vector3 RotateByAngle(Vector3 v, float angle)
+    {
+        float y = v.y * Mathf.Cos(angle) - v.z * Mathf.Sin(angle);
+        float z = v.y * Mathf.Sin(angle) + v.z * Mathf.Cos(angle);
+        return new Vector3(v.x, y,  z);
     }
 
     private Vector3 CalculateWorldPlaneCoordinates(float lat, float lon)
     {   
         Vector2d latLonCoords = new Vector2d(lat, lon);
-        return _map.GeoToWorldPosition(latLonCoords, true);
+        return MyGeoToWorldPosition(latLonCoords);
+    }
+
+    private Vector3 MyGeoToWorldPosition(Vector2d latlon)
+    {   
+        var scaleFactor = Mathf.Pow(2, _map.InitialZoom - _map.AbsoluteZoom);
+        //Debug.Log("scaleFactor=" + scaleFactor + ", relativeScale=" + map.WorldRelativeScale + ", product=" + scaleFactor * map.WorldRelativeScale);
+        var worldPos = Conversions.GeoToWorldPosition(latlon, _map.CenterMercator, _map.WorldRelativeScale * scaleFactor).ToVector3xz();
+        return worldPos / 10f * absoluteDistance / initAbsoluteDistance;
     }
 
     private float CalculateWorldHeight(float seconds)
@@ -142,13 +155,9 @@ public class K_DatabaseLegData : ILegData
 
         if(projectOnTimePlane)
         {   
-            //Debug.Log("Leg: id=" + id + ", plane height: " + DynamicTimePlane.height + ", real height: " + realHeight * timeHeightMultiplier);
-            return Mathf.Max(DynamicTimePlane.height, realHeight * timeHeightMultiplier);
+            return Mathf.Max(DynamicTimePlane.height, realHeight);
         }
-        else
-        {
-            return realHeight * timeHeightMultiplier;
-        }
+        return realHeight;
     }
 
     public string GetStartPoint()

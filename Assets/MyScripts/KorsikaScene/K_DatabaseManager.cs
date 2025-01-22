@@ -291,7 +291,7 @@ public class K_DatabaseManager
         infoPanel?.SetAllInformation(nofTrips, nofLegs, agentsSet.Count, avgTravelTime / nofLegs, 0);
         dataPathVisualizationManager.DestroyAllPaths();
 
-        DashboardManager dashboard = GameObject.Find("MapDashboard").GetComponent<DashboardManager>();
+        DashboardManager dashboard = GameObject.Find("MapDashboardPanel").GetComponent<DashboardManager>();
         dashboard?.UpdateDatasetChart(filteredLegsList);
 
         Debug.Log("Applied filter -> total paths: " + initialLegsList.Count + ", filtered paths: " + filteredLegsList.Count);

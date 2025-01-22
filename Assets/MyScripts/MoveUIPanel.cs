@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using static Params_PanelStartingPositions;
 
 public class MoveUIPanel : MonoBehaviour
 {
@@ -12,7 +13,14 @@ public class MoveUIPanel : MonoBehaviour
     private Vector3 inputStartPos;
 
     void Start()
-    {
+    {   
+        WorldPositionParameters wpp = Params_PanelStartingPositions.GetWorldPositionParametersByName(UIPanelParentGO.name);
+#if !UNITY_EDITOR
+        UIPanelParentGO.transform.position = wpp.position;
+        UIPanelParentGO.transform.rotation = wpp.rotation;
+        UIPanelParentGO.transform.position = wpp.position;
+#endif
+
         parentTransform = UIPanelParentGO.transform;
         inEvents = InputEventsInvoker.InputEventTypes;
         if(inEvents != null)

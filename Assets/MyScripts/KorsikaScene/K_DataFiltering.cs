@@ -6,7 +6,7 @@ using TMPro;
 
 public class K_DataFiltering : MonoBehaviour
 {
-    [SerializeField] GameObject applyButton;
+    [SerializeField] Button applyFilterButton;
     [SerializeField] DoubleSlider departureTimeRangeSlider;
     [SerializeField] DoubleSlider travelDurationRangeSlider;
     [SerializeField] DoubleSlider travelDistanceRangeSlider;
@@ -24,7 +24,6 @@ public class K_DataFiltering : MonoBehaviour
 
     void Start()
     {
-        InputEventsInvoker.InputEventTypes.HandSingleIPinchStart += OnInputStart;
         _databaseManager = K_DatabaseManager.GetInstance();
 
         departureTimeRangeSlider.WholeNumbers = true;
@@ -32,6 +31,7 @@ public class K_DataFiltering : MonoBehaviour
         travelDistanceRangeSlider.WholeNumbers = true;
         agentSlider.WholeNumbers = true;
 
+        applyFilterButton.onClick.AddListener(OnApplyFilterButtonPressed);
         travelModeDropdown.onValueChanged.AddListener(OnTravelModeChanged);
         departureTimeRangeSlider.OnValueChanged.AddListener(OnDepartureTimeRangeChanged);
         travelDurationRangeSlider.OnValueChanged.AddListener(OnTravelDurationRangeChanged);
@@ -43,14 +43,6 @@ public class K_DataFiltering : MonoBehaviour
         travelDurations = new float[] { travelDurationRangeSlider.MinValue, travelDurationRangeSlider.MaxValue };
         travelDistances = new float[] { travelDistanceRangeSlider.MinValue, travelDistanceRangeSlider.MaxValue };
         agentRange = new float[] { agentSlider.MinValue, agentSlider.MaxValue };
-    }
-
-    private void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
-    {
-        if(targetObj.transform.IsChildOf(applyButton.transform))
-        {
-            OnApplyFilterButtonPressed();
-        }
     }
 
     private void OnApplyFilterButtonPressed()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Mapbox.Examples;
 using Mapbox.Unity.Map;
 using Mapbox.Unity.Utilities;
 using Mapbox.Utils;
@@ -39,6 +40,8 @@ public class K_DataPathVisualizationManager : MonoBehaviour
     [SerializeField] TMP_Dropdown lineStyleDropdown;
     [SerializeField] GameObject popupWindowPrefab;
     [SerializeField] Transform mapRoot;
+    [SerializeField] Transform globalMapRoot;
+    [SerializeField] Material selectedLineMaterial;
 
     public enum PathType{
         Line,
@@ -52,6 +55,8 @@ public class K_DataPathVisualizationManager : MonoBehaviour
     void Start()
     {   
         Debug.Log("Started K_DataPathVisualizationManager");
+
+        K_DatabaseLegData.initAbsoluteDistance = CustomReloadMap.GetReferenceDistance();
 
         inputEvents = InputEventsInvoker.InputEventTypes;
         inputEvents.HandSingleIPinchStart += OnInputStart;
@@ -67,6 +72,8 @@ public class K_DataPathVisualizationManager : MonoBehaviour
         DynamicTimePlane.TimePlaneChanged += OnMapUpdated;
         abstractMap.OnUpdated += OnMapUpdated;
         lineStyleDropdown.onValueChanged.AddListener(OnLineStyleChanged);
+
+        FadeLine.selectedMaterial = selectedLineMaterial;
     }
 
     void OnLineStyleChanged(int index)
@@ -94,6 +101,11 @@ public class K_DataPathVisualizationManager : MonoBehaviour
                 p.UpdateVisualization();
             } 
         }
+    }
+
+    void Update()
+    {
+        K_TwoPointLineVisualizer.globalMapRoot = globalMapRoot;
     }
 
     void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)

@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mapbox.Unity.Map;
 using UnityEngine;
 
 public class MoveMapRoot : MonoBehaviour
 {      
     [SerializeField] Transform root;
     [SerializeField] GameObject handleGO;
+    [SerializeField] AbstractMap _map;
 
     Vector3 handleInputStartPos;
 
@@ -31,6 +33,7 @@ public class MoveMapRoot : MonoBehaviour
             Vector3 deltaPosition = interactionPos - handleInputStartPos;
             root.position += deltaPosition;
             handleInputStartPos = interactionPos;
+            _map.UpdateMap();
         }
     }
 
