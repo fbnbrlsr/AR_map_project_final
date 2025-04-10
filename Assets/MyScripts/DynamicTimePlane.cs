@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mapbox.Examples;
 using Mapbox.Unity.Map;
 using Mapbox.Unity.MeshGeneration.Modifiers;
 using TMPro;
+using Unity.VisualScripting;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public delegate void TimePlaneChangedEvent();
@@ -13,14 +17,13 @@ public delegate void TimePlaneChangedEvent();
 public class DynamicTimePlane : MonoBehaviour
 {
     
-    [SerializeField] GameObject heightHandlePrefab;
+    [SerializeField] GameObject heightHandleInstance;
     [SerializeField] Toggle projectOntoTimePlaneToggle;
     [SerializeField] GameObject mapHolder;
 
 
     public static TimePlaneChangedEvent TimePlaneChanged;
 
-    GameObject heightHandleInstance;
     Vector3 heightHandleStartPos;
 
     float minHeight;
@@ -34,11 +37,10 @@ public class DynamicTimePlane : MonoBehaviour
     {   
         InputEventsInvoker.InputEventTypes.HandSingleIPinchStart += OnInputStart;
         InputEventsInvoker.InputEventTypes.HandSingleInputCont += OnInputCont;
-        projectOntoTimePlaneToggle.onValueChanged.AddListener(OnProjectOntoTimePlaneToggle);
+        if(projectOntoTimePlaneToggle != null) projectOntoTimePlaneToggle.onValueChanged.AddListener(OnProjectOntoTimePlaneToggle);
 
-        heightHandleInstance = GameObject.Instantiate(heightHandlePrefab);
-        heightHandleInstance.transform.parent = mapHolder.transform;
-        heightHandleInstance.transform.localPosition = new Vector3(0f, 0.2f, 2f);
+        //heightHandleInstance.transform.parent = mapHolder.transform;
+        //heightHandleInstance.transform.localPosition = new Vector3(-1.9f, 0.2f, 0.5f);
 
         minHeight = K_DatabaseLegData.minPointHeight;
         maxHeight = K_DatabaseLegData.maxPointHeight;
@@ -53,7 +55,7 @@ public class DynamicTimePlane : MonoBehaviour
         TimePlaneChanged?.Invoke();
     }
 
-    private void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    private void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {
         if(targetObj.transform.IsChildOf(heightHandleInstance.transform))
         {
@@ -63,7 +65,7 @@ public class DynamicTimePlane : MonoBehaviour
         }
     }
 
-    private void OnInputCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    private void OnInputCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {
         if(targetObj.transform.IsChildOf(heightHandleInstance.transform))
         {   
@@ -82,22 +84,27 @@ public class DynamicTimePlane : MonoBehaviour
 
     void Update()
     {   
-        TMP_Text timeText = heightHandleInstance.GetComponentInChildren<TMP_Text>();
-        timeText.text = "Time:\n" + HeightToTime(mapHolder.transform.localPosition.y);
+        if(SceneManager.GetActiveScene().name.Equals("DummyScene")) return;
+
+        TMP_Text[] timeTexts = heightHandleInstance.GetComponentsInChildren<TMP_Text>();
+        foreach(TMP_Text t in timeTexts)
+        {
+            t.text = "Time:\n" + SecondsToPrettyTime(HeightToTime(mapHolder.transform.localPosition.y));
+        }
         height = mapHolder.transform.localPosition.y;
     }
 
-    string HeightToTime(float height)
+    int HeightToTime(float height)
     {   
-        if(K_DatabaseLegData.timeHeightMultiplier == 0) return "undefined";
+        if(K_DatabaseLegData.timeHeightMultiplier == 0) return -1;
 
-        float absoluteDistance = K_DatabaseLegData.absoluteDistance / 2;
+        float absoluteDistance = CustomReloadMap.GetReferenceDistance() / 2;
         float scaledHeight = height / K_DatabaseLegData.timeHeightMultiplier;
         float frac = ((scaledHeight / absoluteDistance) - minHeight) / (maxHeight - minHeight);
         float timeDiff = frac * (maxTime - minTime);
         int seconds = (int) (minTime + timeDiff);
 
-        return SecondsToPrettyTime(seconds);
+        return seconds;
     }
 
     string SecondsToPrettyTime(int seconds)
@@ -105,8 +112,8 @@ public class DynamicTimePlane : MonoBehaviour
         int hours = seconds / 3600;
         seconds -= hours * 3600;
         int minutes = seconds/60;
-        seconds -= minutes * 60;
-        return hours + "h " + minutes + "min " + seconds + "s";
+        //seconds -= minutes * 60;
+        return hours + "h " + minutes + "min"; /* + seconds + "s";*/
     }
 
 }

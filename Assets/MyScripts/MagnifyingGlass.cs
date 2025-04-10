@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class MagnifyingGlass : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class MagnifyingGlass : MonoBehaviour
         InputEventsInvoker.InputEventTypes.HandSingleInputCont += OnInputCont;
     }
 
-    void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {
 
         if(targetObj.transform.IsChildOf(zoomOutButton.transform))
@@ -39,7 +40,7 @@ public class MagnifyingGlass : MonoBehaviour
 
     }
 
-    void OnInputCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion currRot, GameObject targetObj)
+    void OnInputCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion currRot, GameObject targetObj, SpatialPointerKind touchKind)
     {   
         if(targetObj.transform.IsChildOf(handleGO.transform))
         {   

@@ -1,6 +1,7 @@
 using System;
 using Mapbox.Unity.Map;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 /*
     Creates an arc between a start and end point
@@ -95,7 +96,7 @@ public class TwoPointArcVisualizer : ITwoPointVisualization
         }
     }
 
-    private void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    private void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {
         if(targetObj == startCustomPoint.Instance || targetObj == endCustomPoint.Instance || targetObj == arcLine.Instance)
         {   

@@ -7,12 +7,12 @@ public class K_DatabaseStopData : K_IStopData
     private static int id_counter = 0;
     public readonly int id;
 
-    // Universal facts
-    public static float minLat = 41.36811f;     // --> diff = 1.623273
-    public static float minLon = 8.594249f;     // --> diff = 0.961701
-    public static float maxLat = 42.991383f;
-    public static float maxLon = 9.55595f;
-    public static int resolution = 40;      // number of squares per axis, total squares: resolution^2
+    // Universal facts          [Boundaries for Corsica data: (41.36811, 8.594249), (42.991383, 9.55595)]
+    public static float minLat = 47.35f;    
+    public static float minLon = 8.43f;
+    public static float maxLat = 47.47f;
+    public static float maxLon = 8.60f;
+    public static int resolution = 25;      // number of squares per axis, total squares: resolution^2
     public static float squareSize = Mathf.Min(maxLat - minLat, maxLon - minLon) / (resolution-1);
     
 

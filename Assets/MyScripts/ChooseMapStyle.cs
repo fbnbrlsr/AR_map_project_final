@@ -11,11 +11,13 @@ public class ChooseMapStyle : MonoBehaviour
     ImageryLayer il;
 
     void Start()
-    {
-        mapStyleDropdown.onValueChanged.AddListener(OnMapStyleChanged);
+    {   
+        if(mapStyleDropdown != null) mapStyleDropdown.onValueChanged.AddListener(OnMapStyleChanged);
 
         il = (ImageryLayer) map.ImageLayer;
         mapImageSourceType = il.LayerProperty.sourceType;
+
+        Debug.Log("Map type is " +il.LayerProperty.sourceType);
     }
 
     private void OnMapStyleChanged(int arg0)

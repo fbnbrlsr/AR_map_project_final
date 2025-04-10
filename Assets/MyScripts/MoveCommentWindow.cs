@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public delegate void CommentWindowMoved();
 
@@ -26,12 +24,12 @@ public class MoveCommentWindow : MonoBehaviour
         }
     }
 
-    void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {   
         inputStartPos = interactionPos;
     }
 
-    void OnInputCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion currRot, GameObject targetObj)
+    void OnInputCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion currRot, GameObject targetObj, SpatialPointerKind touchKind)
     {   
         if(targetObj.transform.IsChildOf(UIPanelHandle.transform)){
             Vector3 deltaPosition = interactionPos - inputStartPos;

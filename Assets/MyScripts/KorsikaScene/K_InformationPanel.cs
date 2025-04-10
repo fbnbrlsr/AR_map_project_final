@@ -16,9 +16,9 @@ public class K_InformationPanel : MonoBehaviour
 
     public void SetAllInformation(int nofTrips, int nofLegs, int nofAgents, float avgTravelTime, int nofVisiblePaths)
     {
-        this.nofTrips.text = "#Trips\n" + nofTrips.ToString();
-        this.nofLegs.text = "#Legs\n" + nofLegs.ToString();
-        this.nofAgents.text = "#Agents\n" + nofAgents.ToString();
+        this.nofTrips.text = "Trips\n" + nofTrips.ToString();
+        this.nofLegs.text = "Legs\n" + nofLegs.ToString();
+        this.nofAgents.text = "Agents\n" + nofAgents.ToString();
         this.avgTravelTime.text = "Average travel duration\n" + SecondsToFormatedTime((int)avgTravelTime);
         this.nofVisiblePaths.text = "Visible paths\n" + nofVisiblePaths; 
     }
@@ -30,12 +30,12 @@ public class K_InformationPanel : MonoBehaviour
 
     public void SetNofTransitionalStops(int transitionalStops)
     {
-        this.nofTransitionalStops.text = "#Transitional Stops\n" + transitionalStops;
+        this.nofTransitionalStops.text = "Transitional Stops\n" + transitionalStops;
     }
 
     public void SetNofActivityStops(int activityStops)
     {
-        this.nofActivityStops.text = "#Activity Stops\n" + activityStops;
+        this.nofActivityStops.text = "Activity Stops\n" + activityStops;
 
     }
 

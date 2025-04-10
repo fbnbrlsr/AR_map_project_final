@@ -19,26 +19,25 @@ public class ChartManager
 
     public void UpdateData(int[] carCount, int[] bikeCount, int[] walkCount, int[] carPassengerCount, int[] ptCount)
     {   
-
         foreach(Serie s in barChart.series)
         {
             foreach(SerieData data in s.data)
             {   
                 switch(s.serieName)
                 {
-                    case "carCount":
+                    case "Car":
                         data.data[1] = carCount[(int) data.data[0]];
                         break;
-                    case "bikeCount":
+                    case "Bike":
                         data.data[1] = bikeCount[(int) data.data[0]];
                         break;
-                    case "walkCount":
+                    case "Walk":
                         data.data[1] = walkCount[(int) data.data[0]];
                         break;
-                    case "carPassengerCount":
+                    case "Car Passenger":
                         data.data[1] = carPassengerCount[(int) data.data[0]];
                         break;
-                    case "ptCount":
+                    case "Public Transport":
                         data.data[1] = ptCount[(int) data.data[0]];
                         break;
                     default:
@@ -48,7 +47,7 @@ public class ChartManager
             }
 
         }
-
+        
         barChart.RefreshChart();
         barChart.AnimationFadeIn();
     }

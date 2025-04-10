@@ -43,7 +43,7 @@ public class WriteCommentWindow : MonoBehaviour, ICommentWindow
         windowGeoPosition = _map.WorldToGeoPosition(this.transform.position);
         initCommentWindowHeight = this.transform.position.y - root.position.y;
 
-        CommentsManager.OnCommentWindowUpdated += UpdateCommentWindow;
+        //CommentsManager.OnCommentWindowUpdated += UpdateCommentWindow;
         this.GetComponentInChildren<MoveCommentWindow>().OnCommentWindowMoved += OnCommentWindowMoved;
 
         id += 1;

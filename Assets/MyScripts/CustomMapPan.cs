@@ -1,8 +1,8 @@
 using Mapbox.Unity.Map;
 using Mapbox.Unity.Utilities;
 using Mapbox.Utils;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class CustomMapPan : MonoBehaviour
 {   
@@ -24,12 +24,12 @@ public class CustomMapPan : MonoBehaviour
         }
     }
 
-    void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {   
         inputStartPos = fingerPos;
     }
 
-    void OnInputCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion currRot, GameObject targetObj)
+    void OnInputCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion currRot, GameObject targetObj, SpatialPointerKind touchKind)
     {   
         if(targetObj == panInteractionObject){
             float panMultiplier = panSpeed * Conversions.GetTileScaleInMeters((float)0, _map.AbsoluteZoom) / _map.UnityTileSize;

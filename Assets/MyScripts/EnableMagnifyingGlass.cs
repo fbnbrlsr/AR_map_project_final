@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class EnableMagnifyingGlass : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class EnableMagnifyingGlass : MonoBehaviour
         objectInstance.SetActive(false);
     }
 
-    private void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    private void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {
         if(targetObj.transform.IsChildOf(enableButton.transform))
         {

@@ -1,9 +1,9 @@
 using UnityEngine;
 using Unity.PolySpatial.InputDevices;
-using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.EventSystems;
 
 
 
@@ -62,6 +62,9 @@ public class InputEventsInvoker : MonoBehaviour
 
     void Update()
     {   
+        //EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(null);
+        
         if(Touch.activeTouches.Count == 0)
         {   
             if(triggerInputFinishedEvent)
@@ -84,7 +87,7 @@ public class InputEventsInvoker : MonoBehaviour
         }
         else triggerInputFinishedEvent = true; 
 
-        if(isDrawBoxActive)
+        /*if(isDrawBoxActive)
         {   
             // draw collision box
             largeCollisionBackgroundInstance?.SetActive(true);
@@ -107,7 +110,7 @@ public class InputEventsInvoker : MonoBehaviour
 
             }
             return;
-        }
+        }*/
 
         // Only one hand makes input
         if(Touch.activeTouches.Count == 1)
@@ -122,24 +125,24 @@ public class InputEventsInvoker : MonoBehaviour
             if(touchData.targetObject != null &&
              touchData.Kind == SpatialPointerKind.Touch && touch.phase == TouchPhase.Began)
             {   
-                _inputEventTypes.InvokeHandSingleTouchStart(touchData.inputDevicePosition, touchData.interactionPosition, touchData.inputDeviceRotation, touchData.targetObject);
+                _inputEventTypes.InvokeHandSingleTouchStart(touchData.inputDevicePosition, touchData.interactionPosition, touchData.inputDeviceRotation, touchData.targetObject, touchData.Kind);
                 //Debug.Log("[InputEventsInvoker] Single hand input: Start (Touch)");
             }
             else if(touchData.targetObject != null &&
              touchData.Kind == SpatialPointerKind.DirectPinch && touch.phase == TouchPhase.Began)
             {   
-                _inputEventTypes.InvokeHandSingleDPinchStart(touchData.inputDevicePosition, touchData.interactionPosition, touchData.inputDeviceRotation, touchData.targetObject);
+                _inputEventTypes.InvokeHandSingleDPinchStart(touchData.inputDevicePosition, touchData.interactionPosition, touchData.inputDeviceRotation, touchData.targetObject, touchData.Kind);
                 //Debug.Log("[InputEventsInvoker] Single hand input: Start (Direct Pinch)");
             }
             else if(touchData.targetObject != null &&
              touchData.Kind == SpatialPointerKind.IndirectPinch && touch.phase == TouchPhase.Began)
             {   
-                _inputEventTypes.InvokeHandSingleIPinchStart(touchData.inputDevicePosition, touchData.interactionPosition, touchData.inputDeviceRotation, touchData.targetObject);
+                _inputEventTypes.InvokeHandSingleIPinchStart(touchData.inputDevicePosition, touchData.interactionPosition, touchData.inputDeviceRotation, touchData.targetObject, touchData.Kind);
                 //Debug.Log("[InputEventsInvoker] Single hand input: Start (Indirect Pinch)");
             }
             else if(touchData.targetObject != null)
             {
-                _inputEventTypes.InvokeHandSingleInputCont(touchData.inputDevicePosition, touchData.interactionPosition, touchData.inputDeviceRotation, touchData.targetObject);
+                _inputEventTypes.InvokeHandSingleInputCont(touchData.inputDevicePosition, touchData.interactionPosition, touchData.inputDeviceRotation, touchData.targetObject, touchData.Kind);
                 //Debug.Log("[InputEventsInvoker] Single hand input: Continuous");
 
                 /*if(debugInstance0 == null)

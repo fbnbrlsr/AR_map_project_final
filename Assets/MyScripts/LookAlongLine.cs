@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem.LowLevel;
 
 public class LookAlongLine : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class LookAlongLine : MonoBehaviour
         moveToPoint = false;
     }
 
-    void OnTouchInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    void OnTouchInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {   
         if(touchPointIndicator != null)
         {

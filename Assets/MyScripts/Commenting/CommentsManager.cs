@@ -16,7 +16,7 @@ public delegate void CommentWindowUpdate();
 
 public class CommentsManager : MonoBehaviour
 {   
-    public static CommentWindowUpdate OnCommentWindowUpdated;
+    /*public static CommentWindowUpdate OnCommentWindowUpdated;
 
     [SerializeField] GameObject commentBoxPrefab;
     [SerializeField] GameObject writeCommentWindowPrefab;
@@ -92,11 +92,11 @@ public class CommentsManager : MonoBehaviour
     public void HandleCreateVoiceComment(GameObject commentBox)
     {   
         Debug.LogError("Create voice comment not implemented!");
-        /*GameObject commentWindow = GameObject.Instantiate(voiceCommentWindowPrefab);
+        GameObject commentWindow = GameObject.Instantiate(voiceCommentWindowPrefab);
         commentWindow.transform.position = CustomHeadTracking.GetHeadPosition() + 0.5f * Vector3.forward;
 
         // TODO
-        spawnedCommentWindows.Add(commentWindow);*/
+        spawnedCommentWindows.Add(commentWindow);
     }
 
     public void UpdateAllCommentWindows()
@@ -130,5 +130,5 @@ public class CommentsManager : MonoBehaviour
                 cw.SetActive(true);
             }
         }
-    }
+    }*/
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MapLegend : MonoBehaviour
 {   
-    [SerializeField] GameObject root;
+    [SerializeField] GameObject mapHolder;
     [SerializeField] GameObject pathColorLegendPrefab;
     [SerializeField] TMP_Text titleText;
     public string mapTitle;
@@ -13,7 +13,7 @@ public class MapLegend : MonoBehaviour
     static bool showLegend;
 
 
-    void Start()
+    void Awake()
     {
         showLegend = false;
 
@@ -39,11 +39,13 @@ public class MapLegend : MonoBehaviour
     void GenerateLegend()
     {
         pathColorLegendInstance = GameObject.Instantiate(pathColorLegendPrefab);
-        pathColorLegendInstance.transform.parent = root.transform;
-        pathColorLegendInstance.transform.localPosition = new Vector3(0f, 1f, 7f);
+        pathColorLegendInstance.transform.parent = mapHolder.transform;
+        pathColorLegendInstance.transform.localPosition = new Vector3(1.5f, 0.3f, 1f);
+        pathColorLegendInstance.transform.localScale = new Vector3(3f, 3f, 3f);
+        pathColorLegendInstance.transform.rotation = new Quaternion(0.382683426f,0f,0f,0.923879564f);
 
 
-        TMP_Text[] texts = pathColorLegendInstance.GetComponentsInChildren<TMP_Text>();
+        /*TMP_Text[] texts = pathColorLegendInstance.GetComponentsInChildren<TMP_Text>();
         float[][] intervals = K_DatabaseLegData.GetTimeCategoryIntervals();
 
         for(int i = 0; i < texts.Length; i++)
@@ -57,7 +59,7 @@ public class MapLegend : MonoBehaviour
                     text.text = SecondsToPrettyTime((int) intervals[j][0]) + "\nto\n" + SecondsToPrettyTime((int) intervals[j][1]);
                 }
             }
-        }
+        }*/
     }
 
     string SecondsToPrettyTime(int seconds)

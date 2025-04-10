@@ -1,6 +1,7 @@
 using System;
 using Mapbox.Unity.Map;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 /*
     Creates a line between a start and end point
@@ -55,7 +56,11 @@ public class TwoPointLineVisualizer : ITwoPointVisualization
         isIntantiated = false;
         isSelected = false;
 
+#if UNITY_EDITOR
         InputEventsInvoker.InputEventTypes.HandSingleIPinchStart += OnInputStart;
+#else
+        InputEventsInvoker.InputEventTypes.HandSingleDPinchStart += OnInputStart;
+#endif
     }
 
     public void InstantiatePath()
@@ -91,7 +96,7 @@ public class TwoPointLineVisualizer : ITwoPointVisualization
         }
     }
 
-    private void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    private void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {
         if(targetObj == startCustomPoint.Instance || targetObj == endCustomPoint.Instance || targetObj == fadeLine.Instance)
         {

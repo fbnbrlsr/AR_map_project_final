@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UI;
 
 public class DebugPanel : MonoBehaviour
@@ -81,13 +82,13 @@ public class DebugPanel : MonoBehaviour
     }
 
     // DEBUG INPUT EVENTS
-    public void OnAnySingleInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion rot, GameObject targetObj)
+    public void OnAnySingleInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion rot, GameObject targetObj, SpatialPointerKind touchKind)
     {
         singleStart = "SINGLE START: fingerPos=" + fingerPos + ", interactionPos=" + interactionPos + ", rot=" + rot + "\n";
         singleStart += " > targetObj=" + targetObj + "\n";
     }
 
-    public void OnSingleInputCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion rot, GameObject targetObj)
+    public void OnSingleInputCont(Vector3 fingerPos, Vector3 interactionPos, Quaternion rot, GameObject targetObj, SpatialPointerKind touchKind)
     {
         singleCont = "SINGLE CONT: pos=" + fingerPos + ", interactionPos=" + interactionPos + ", rot=" + rot + "\n";
         singleCont += " > targetObj=" + targetObj + "\n";

@@ -15,11 +15,11 @@ public class CommentsUIInput : MonoBehaviour
 
     void Start()
     {   
-        createVoiceCommentButton.onClick.AddListener(OnCreateVoiceCommentButtonClicked);
+        /*createVoiceCommentButton.onClick.AddListener(OnCreateVoiceCommentButtonClicked);
         createWriteCommentButton.onClick.AddListener(OnCreateWriteCommentButtonClicked);
         createCommentClassInputField.onSubmit.AddListener(OnCreateCommentClassSubmit);
         enableDrawBoxButton.onClick.AddListener(OnEnableDrawBoxButtonClicked);
-        visibleCommentClassesDropdown.onValueChanged.AddListener(OnVisibleCommentClassesChanged);
+        visibleCommentClassesDropdown.onValueChanged.AddListener(OnVisibleCommentClassesChanged);*/
     }
 
     private void OnVisibleCommentClassesChanged(uint arg0)
@@ -38,7 +38,7 @@ public class CommentsUIInput : MonoBehaviour
             visibleCommentClassesDropdown.captionText.text = selectedOptions;
         }
 
-        commentsManager.HandleVisibleCommentClassesChanged(visibleCommentClassesDropdown.GetSelectedOptionsList());
+        //commentsManager.HandleVisibleCommentClassesChanged(visibleCommentClassesDropdown.GetSelectedOptionsList());
     }
 
     private void OnCreateCommentClassSubmit(string className)
@@ -73,10 +73,10 @@ public class CommentsUIInput : MonoBehaviour
             visibleCommentClassesDropdown.captionText.text = selectedOptions;
         }
 
-        commentsManager.HandleAddCommentClass(className);
+        //commentsManager.HandleAddCommentClass(className);
     }
 
-    private void OnCreateVoiceCommentButtonClicked()
+    /*private void OnCreateVoiceCommentButtonClicked()
     {   
         commentsManager.HandleCreateVoiceComment(null);
     }
@@ -89,6 +89,6 @@ public class CommentsUIInput : MonoBehaviour
     private void OnEnableDrawBoxButtonClicked()
     {   
         commentsManager.HandleCreateCommentBox();
-    }
+    }*/
 
 }

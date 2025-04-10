@@ -26,7 +26,7 @@ namespace Mapbox.Examples
 		// My stuff
 		[SerializeField] Slider _zoomSlider;
 		[SerializeField] Slider zoomSensitivitySlider;
-		[SerializeField] GameObject mapParentObject;
+		[SerializeField] GameObject mapHolderObject;
 		private float initHandDistance;
 		float zoomSensitivity;
 
@@ -71,6 +71,8 @@ namespace Mapbox.Examples
 			InputEventsInvoker.InputEventTypes.HandDoubleInputStart += OnHandZoomStart;
 			InputEventsInvoker.InputEventTypes.HandDoubleInputCont += OnHandZoomCont;
 			initHandDistance = 1f;
+
+			zoomSensitivity = 0.05f;
 		}
 
 		void ForwardGeocoder_OnGeocoderResponse(ForwardGeocodeResponse response)
@@ -120,7 +122,7 @@ namespace Mapbox.Examples
 
 		public void OnHandZoomStart(Vector3 pos0, Quaternion rot0, Vector3 pos1, Quaternion rot1, GameObject targetObj)
 		{	
-			if(targetObj.transform.IsChildOf(mapParentObject.transform))
+			if(targetObj.transform.IsChildOf(mapHolderObject.transform))
 			{
 				initHandDistance = Vector3.Distance(pos0, pos1);
 			}
@@ -128,7 +130,7 @@ namespace Mapbox.Examples
 
 		public void OnHandZoomCont(Vector3 pos0, Quaternion rot0, Vector3 pos1, Quaternion rot1, GameObject targetObj)
 		{	
-			if(targetObj.transform.IsChildOf(mapParentObject.transform))
+			if(targetObj.transform.IsChildOf(mapHolderObject.transform))
 			{
 				float currDistance = Vector3.Distance(pos0, pos1);
 				float deltaRatio = currDistance / initHandDistance;
@@ -138,30 +140,6 @@ namespace Mapbox.Examples
 				if(Mathf.Abs(deltaRatio - 1f) > .1f) return;
 
 				_map.UpdateMap(_map.CenterLatitudeLongitude, _map.Zoom * deltaRatio);
-
-
-				// Maybe try if this is a better solution (absolute distances between new and old finger positions instead of a ratio)
-				/*float currentTouchDistance = Vector2.Distance(pos0, pos1);
-				float previousTouchDistance = Vector2.Distance(prevPos0, prevPos1);
-				float deltaDistance = currentTouchDistance - previousTouchDistance;
-
-				prevPos0 = pos0;
-				prevPos1 = pos1;
-
-				if(Mathf.Abs(deltaDistance) > .5f) return;
-
-				if(displayCounter % 10 == 0)
-				{
-					DebugPanel.Log(" > deltaDist: " + deltaDistance);
-					displayCounter = 0;
-				}
-				displayCounter += 1;
-
-				_map.UpdateMap(_map.CenterLatitudeLongitude, _map.Zoom + deltaDistance);*/
-
-
-
-
 			}
 		}
 

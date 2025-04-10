@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem.LowLevel;
 
 public class PathSelection : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class PathSelection : MonoBehaviour
         selectedPaths = new Dictionary<GameObject, Material>();
     }
 
-    private void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    private void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {   
         if(targetObj.name.Contains("FadeLine"))
         {   

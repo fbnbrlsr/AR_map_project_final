@@ -8,7 +8,7 @@ using UnityEngine.ProBuilder.Shapes;
 
 public class MoveConnectionCommentWindow : MonoBehaviour
 {
-    [SerializeField] GameObject windowParentGO;
+    /*[SerializeField] GameObject windowParentGO;
     [SerializeField] GameObject windowHandle;
     [SerializeField] GameObject connectionLine;
     [SerializeField] GameObject connectionPoint;
@@ -43,6 +43,6 @@ public class MoveConnectionCommentWindow : MonoBehaviour
             parentTransform.rotation = Quaternion.LookRotation(parentTransform.position - CustomHeadTracking.GetHeadPosition());
             inputStartPos = interactionPos;
         }
-    }
+    }*/
 
 }

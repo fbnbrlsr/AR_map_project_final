@@ -3,6 +3,7 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 
+
 public class K_PathInformationPanel
 {   
 
@@ -15,6 +16,7 @@ public class K_PathInformationPanel
     private static int id_c;
     private int id;
 
+
     public K_PathInformationPanel(K_DatabaseLegData leg, GameObject prefab)
     {
         this.leg = leg;
@@ -25,6 +27,8 @@ public class K_PathInformationPanel
     
     public void Show(Vector3 worldPos, Vector3 headPos)
     {   
+        
+
         if(instance != null) 
         {
             GameObject.Destroy(instance);

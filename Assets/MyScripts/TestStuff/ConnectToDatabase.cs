@@ -1,6 +1,7 @@
 using System;
 using Npgsql;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class ConnectToDatabase : MonoBehaviour
 {
@@ -52,7 +53,7 @@ public class ConnectToDatabase : MonoBehaviour
 
     }
 
-    void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {
         if(targetObj.transform.IsChildOf(connectButton.transform))
         {

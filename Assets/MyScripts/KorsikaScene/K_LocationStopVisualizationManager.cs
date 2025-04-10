@@ -1,12 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Reflection.Emit;
 using Mapbox.Examples;
 using Mapbox.Unity.Map;
 using UnityEngine;
-using UnityEngine.Jobs;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class K_LocationStopVisualizationManager : MonoBehaviour
 {
@@ -14,14 +9,14 @@ public class K_LocationStopVisualizationManager : MonoBehaviour
 
     // Visualization parameters
     [SerializeField] GameObject transitionalStopColumnPrefab;
-    //[SerializeField] GameObject transitionalStopPointPrefab;        // (not used at the moment)
     [SerializeField] GameObject activityStopColumnPrefab;
-    //[SerializeField] GameObject activityStopPointPrefab;            // (not used at the moment)
-    [SerializeField] MultiSelectDropdown showStopsTypeDropdown;
     [SerializeField] AbstractMap abstractMap;
     [SerializeField] GameObject transitionalStopInformationWindowPrefab;
     [SerializeField] GameObject activityStopInformationWindowPrefab;
+    [SerializeField] Transform globalRoot;
     [SerializeField] Transform mapRoot;
+    [SerializeField] MyBellButton showTransitionalStopsButton;
+    [SerializeField] MyBellButton showActivityStopsButton;
 
     List<K_TransitionalStopColumn> spawnedTransitionalStopColumnsList;
     List<K_ActivityStopColumn> spawnedActivityStopColumnsList;
@@ -35,38 +30,32 @@ public class K_LocationStopVisualizationManager : MonoBehaviour
         K_DatabaseManager.SetLocationStopVisualizationManager(this);
         _databaseManager.InitializeLocationStops();
 
-        showStopsTypeDropdown.onValueChanged.AddListener(OnStopsTypeChanged);
+        //showStopsTypeDropdown.onValueChanged.AddListener(OnStopsTypeChanged);
 
         abstractMap.OnUpdated += OnMapUpdated;
+
+        showTransitionalStopsButton.OnToggleButton += ShowTransitionalStopsButtonToggle;
+        showActivityStopsButton.OnToggleButton += ShowActivityStopsButtonToggle;
+
+        K_TransitionalStopColumn.globalRoot = globalRoot;
+        K_TransitionalStopColumn.initAbsoluteDistance = CustomReloadMap.GetReferenceDistance();
+        K_TransitionalStopColumn._map = abstractMap;
+
+        K_ActivityStopColumn.globalRoot = globalRoot;
+        K_ActivityStopColumn.initAbsoluteDistance = CustomReloadMap.GetReferenceDistance();
+        K_ActivityStopColumn._map = abstractMap;
     }
 
-    private void OnStopsTypeChanged(uint arg)
+    private void ShowTransitionalStopsButtonToggle(bool val)
     {
-        OnDestroyActivityStops();
-        OnDestroyTransitionalStops();
+        if(val) OnSpawnTransitionalStops();
+        else OnDestroyTransitionalStops();
+    }
 
-        List<MultiSelectDropdown.OptionData> list = showStopsTypeDropdown.GetSelectedOptionsList();
-
-        string label = "";
-        if(list.Count == 0)
-        {
-            label = "None";
-        }
-        else
-        {
-            label = list[0].text;
-            if(list[0].text.Equals("Activity Stops")) OnSpawnActivityStops();
-            if(list[0].text.Equals("Transitional Stops")) OnSpawnTransitionalStops();
-
-            for(int i = 1; i < list.Count; i++)
-            {
-                label += ", " + list[i].text;
-                if(list[i].text.Equals("Activity Stops")) OnSpawnActivityStops();
-                if(list[i].text.Equals("Transitional Stops")) OnSpawnTransitionalStops();
-            }
-        }
-
-        showStopsTypeDropdown.captionText.text = label;
+    private void ShowActivityStopsButtonToggle(bool val)
+    {
+        if(val) OnSpawnActivityStops();
+        else OnDestroyActivityStops();
     }
 
     void OnMapUpdated()
@@ -90,13 +79,15 @@ public class K_LocationStopVisualizationManager : MonoBehaviour
     }
 
     private void OnSpawnTransitionalStops()
-    {
+    {   
+        K_StopInformationWindow.HideAll();
         spawnedTransitionalStopColumnsList = new List<K_TransitionalStopColumn>();
         CreateTransitionalStopsGrid();
     }
 
     private void OnSpawnActivityStops()
-    {   
+    {      
+        K_StopInformationWindow.HideAll();
         spawnedActivityStopColumnsList = new List<K_ActivityStopColumn>();
         CreateActivityStopsGrid();
     }
@@ -141,7 +132,7 @@ public class K_LocationStopVisualizationManager : MonoBehaviour
             stop.UpdateVisualization(columnWidth);
         }
 
-         K_InformationPanel infoPanel = GameObject.Find("InformationPanel").GetComponent<K_InformationPanel>();
+        K_InformationPanel infoPanel = GameObject.Find("StatisticsPanel").GetComponent<K_InformationPanel>();
         infoPanel?.SetNofTransitionalStops(totalTransitionalStops);
 
     }
@@ -186,7 +177,7 @@ public class K_LocationStopVisualizationManager : MonoBehaviour
             stop.UpdateVisualization(columnWidth);
         }
 
-        K_InformationPanel infoPanel = GameObject.Find("InformationPanel").GetComponent<K_InformationPanel>();
+        K_InformationPanel infoPanel = GameObject.Find("StatisticsPanel").GetComponent<K_InformationPanel>();
         infoPanel?.SetNofActivityStops(totalActivityStops);
     }
 

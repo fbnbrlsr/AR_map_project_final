@@ -48,11 +48,11 @@ public class FadeLine
         this.startPoint = newStartPoint + K_TwoPointLineVisualizer.globalMapRoot.position;
         this.endPoint = newEndPoint + K_TwoPointLineVisualizer.globalMapRoot.position;
 
-        if(!InViewingRange(startPoint) && !InViewingRange(endPoint)){
+        /*if(!InViewingRange(startPoint) && !InViewingRange(endPoint)){
             instance.SetActive(false);
             return;
         }
-        instance.SetActive(true);
+        instance.SetActive(true);*/
 
         float dist = Vector3.Distance(startPoint, endPoint);
         instance.transform.localPosition = startPoint/2 + endPoint/2 /* - instance.transform.parent.position*/;
@@ -74,12 +74,10 @@ public class FadeLine
         if(isSelected)
         {
             instance.GetComponent<MeshRenderer>().material = selectedMaterial;
-            Debug.Log("Line selected");
         }
         else
         {
             instance.GetComponent<MeshRenderer>().material = originalMaterial;
-            Debug.Log("Line deselected");
         }
     }
 

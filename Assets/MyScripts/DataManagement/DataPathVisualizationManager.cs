@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using Mapbox.Unity.Map;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
+using UnityEngine.InputSystem.LowLevel;
 
 /*
     Manages the visualization of the path data from the database
@@ -88,7 +87,7 @@ public class DataPathVisualizationManager : MonoBehaviour
         }
     }
 
-    void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj)
+    void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {
         if(targetObj.transform.IsChildOf(spawnPointButtonGO.transform))
         {

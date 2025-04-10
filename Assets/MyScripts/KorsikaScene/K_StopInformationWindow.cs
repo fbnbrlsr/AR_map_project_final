@@ -3,6 +3,8 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
+
+
 public class K_StopInformationWindow
 {
     
@@ -22,14 +24,17 @@ public class K_StopInformationWindow
         this.lon = lon;
         this.nof_stops = nof_stops;
         this.prefab = prefab;
+
+        K_DataPathVisualizationManager.GlobalNewWindowSpawnedEvent += this.Hide;
     }
 
     public void Show(Vector3 worldPos, Vector3 headPos, int nof_stops)
-    {
+    {   
         this.nof_stops = nof_stops;
         if(instance != null)
         {
             GameObject.Destroy(instance);
+            return;
         }
 
         rotation = Quaternion.LookRotation(worldPos - headPos);
@@ -53,8 +58,13 @@ public class K_StopInformationWindow
     }
 
     public void Hide()
-    {
+    {   
         GameObject.Destroy(instance);
+    }
+
+    public static void HideAll()
+    {
+        K_DataPathVisualizationManager.InvokeGlobalNewWindowSpawnedEvent();
     }
 
 }

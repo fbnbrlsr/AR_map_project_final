@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using XCharts.Runtime;
@@ -13,24 +14,21 @@ public class DashboardManager : MonoBehaviour
     
     void Start()
     {
-        chartManager = new ChartManager();
-        chartManager.SetBarChart(barChart);
-        totalLegCountText.text = "Total: 0";
     }
 
     public void UpdateDatasetChart(List<K_DatabaseLegData> filteredData)
-    {
-        int[] carCount = new int[24];
-        int[] bikeCount = new int[24];
-        int[] walkCount = new int[24];
-        int[] carPassengerCount = new int[24];
-        int[] ptCount = new int[24];
+    {   
+        int[] carCount = new int[30];
+        int[] bikeCount = new int[30];
+        int[] walkCount = new int[30];
+        int[] carPassengerCount = new int[30];
+        int[] ptCount = new int[30];
         int totalLegCount = 0;
 
         foreach(K_DatabaseLegData leg in filteredData)
         {   
             totalLegCount += 1;
-            int hour = ((int) leg.departure_time) % 86400 / 3600;
+            int hour = ((int) leg.departure_time) % 108000 / 3600;
             switch(leg.travel_mode)
             {
                 case TravelMode.Car:
@@ -45,7 +43,7 @@ public class DashboardManager : MonoBehaviour
                 case TravelMode.CarPassenger:
                     carPassengerCount[hour] += 1;
                     break;
-                case TravelMode.pt:
+                case TravelMode.PublicTr:
                     ptCount[hour] += 1;
                     break;
                 default:
@@ -54,8 +52,16 @@ public class DashboardManager : MonoBehaviour
             }
         }
 
+        if(chartManager == null) this.Initialize();
         chartManager.UpdateData(carCount, bikeCount, walkCount, carPassengerCount, ptCount);
         totalLegCountText.text = "Total: " + totalLegCount;
+    }
+
+    private void Initialize()
+    {
+        chartManager = new ChartManager();
+        chartManager.SetBarChart(barChart);
+        totalLegCountText.text = "Total: 0";
     }
 
 

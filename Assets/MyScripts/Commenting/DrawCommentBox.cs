@@ -9,7 +9,7 @@ public class DrawCommentBox
 {
     
     
-    static GameObject commentBoxPrefab;
+    /*static GameObject commentBoxPrefab;
     
     public static NewCommentBoxCreated OnNewCommentBoxCreated;
 
@@ -63,6 +63,6 @@ public class DrawCommentBox
             currentBoxInstance.transform.position = currentBoxStart + diff / 2;
             currentBoxInstance.transform.localScale = diff;
         }
-    }
+    }*/
 
 }

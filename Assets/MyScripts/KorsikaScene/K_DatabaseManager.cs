@@ -7,10 +7,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class K_DatabaseManager
 {   
-    private static readonly string DataSource = K_RawData.all_legs_data;
+    //private static readonly string DataSource = K_RawData.all_legs_data;
+    private static readonly string PathsDataSource = Z_RawData.paths_final;
+    private static readonly string StopsDataSource = Z_RawData.all_stops_final;
     public static K_DatabaseManager DatabaseManagerInstance;
     private static K_DataPathVisualizationManager dataPathVisualizationManager;
     private static K_LocationStopVisualizationManager locationStopVisualizationManager;
@@ -24,6 +27,7 @@ public class K_DatabaseManager
     // Location stops
     DataTable locationStopsQueryResult;
     List<K_DatabaseStopData> initialLocationStopsList;
+
 
     public static K_DatabaseManager GetInstance()
     {   
@@ -48,7 +52,13 @@ public class K_DatabaseManager
     {   
         Debug.Log("[DatabaseManager] Initializing paths...");
         ReadFromPathsString();
-        ApplyPathsFilter(new List<TravelMode>(), 0f, 24f, 0f, 1400f, 0f, 172f, 435f, 319827f);
+        ApplyPathsFilter(
+            new HashSet<TravelMode>(), 
+            new HashSet<CustomInterval>(), 
+            new HashSet<CustomInterval>(),
+            new HashSet<CustomInterval>(),
+            new float[]{float.MaxValue, float.MinValue}
+        );
     }
 
     public void InitializeLocationStops()
@@ -58,7 +68,7 @@ public class K_DatabaseManager
     }
 
     private void ReadFromPathsString()
-    {
+    {   
         pathsQueryResult = ConvertPathsStringToDataTable();
         GenerateLegsList();
     }
@@ -77,6 +87,7 @@ public class K_DatabaseManager
         for(int rowIndex = 0; rowIndex < pathsQueryResult.Rows.Count; rowIndex++)
         {   
             int person_id = pathsQueryResult.Rows[rowIndex]["person_id"]!=DBNull.Value ? (int) pathsQueryResult.Rows[rowIndex]["person_id"] : int.MinValue;
+            if( person_id < K_DatabaseLegData.personIDLowerBound || person_id > K_DatabaseLegData.personIDUpperBound) continue;
             int trip_id = pathsQueryResult.Rows[rowIndex]["trip_id"]!=DBNull.Value ? (int) pathsQueryResult.Rows[rowIndex]["trip_id"] : int.MinValue;
             int leg_index = pathsQueryResult.Rows[rowIndex]["leg_index"]!=DBNull.Value ? (int) pathsQueryResult.Rows[rowIndex]["leg_index"] : int.MinValue;
             float origin_lon = pathsQueryResult.Rows[rowIndex]["origin_lon"]!=DBNull.Value ? (float) (double) pathsQueryResult.Rows[rowIndex]["origin_lon"] : float.MinValue;
@@ -92,9 +103,9 @@ public class K_DatabaseManager
             );
             initialLegsList.Add(leg);
         }
-        DebugPanel.Log("[DatabaseManager] Loaded " + initialLegsList.Count + " paths from database");
-        Debug.Log("Leg data: earliestTime=" + K_DatabaseLegData.earliestTime + ", latesTime=" + K_DatabaseLegData.latestTime 
-            + ", maxDur=" + K_DatabaseLegData.maxDuration + ", minDur=" + K_DatabaseLegData.minDuration);
+        Debug.Log("[DatabaseManager] Loaded " + initialLegsList.Count + " paths from database");
+        Debug.Log("Leg data: minID=" + K_DatabaseLegData.minPersonID + ", maxID=" + K_DatabaseLegData.maxPersonID + ", earliestTime=" + K_DatabaseLegData.earliestTime + ", latesTime=" + K_DatabaseLegData.latestTime 
+              + ", minDur=" + K_DatabaseLegData.minDuration + ", maxDur=" + K_DatabaseLegData.maxDuration);
     }
 
     private void GenerateLocationStopsList()
@@ -104,6 +115,7 @@ public class K_DatabaseManager
         for(int rowIndex = 0; rowIndex < locationStopsQueryResult.Rows.Count; rowIndex++)
         {
             int person_id = locationStopsQueryResult.Rows[rowIndex]["person_id"]!=DBNull.Value ? (int) locationStopsQueryResult.Rows[rowIndex]["person_id"] : int.MinValue;
+            if( person_id < K_DatabaseLegData.personIDLowerBound || person_id > K_DatabaseLegData.personIDUpperBound) continue;
             int trip_id = locationStopsQueryResult.Rows[rowIndex]["trip_id"]!=DBNull.Value ? (int) locationStopsQueryResult.Rows[rowIndex]["trip_id"] : int.MinValue;;
             int leg_index = locationStopsQueryResult.Rows[rowIndex]["leg_index"]!=DBNull.Value ? (int) locationStopsQueryResult.Rows[rowIndex]["leg_index"] : int.MinValue;;
             float dest_lon = locationStopsQueryResult.Rows[rowIndex]["destination_lon"]!=DBNull.Value ? (float) (double) locationStopsQueryResult.Rows[rowIndex]["destination_lon"] : float.MinValue;
@@ -123,6 +135,11 @@ public class K_DatabaseManager
         return res;
     }
 
+    public List<K_DatabaseLegData> GetFilteredLegsList()
+    {
+        return filteredLegsList;
+    }
+
     public bool HasMorePaths()
     {
         return nextLegIndex < filteredLegsList.Count;
@@ -131,8 +148,9 @@ public class K_DatabaseManager
     private DataTable ConvertPathsStringToDataTable()
     {
         DataTable dt = new DataTable();
-        string[] lines = DataSource.Split('\n');
+        string[] lines = PathsDataSource.Split('\n');
         string[] headers = lines[0].Split(',');
+
         foreach (string header in headers)
         {   
             dt.Columns.Add(header);
@@ -173,24 +191,22 @@ public class K_DatabaseManager
                 }
                 catch(Exception e)
                 {
-                    Debug.Log("CAUGHT ERROR in column " + dt.Columns[i] + ", value: " + row[i] + ", error: " + e.Message);
+                    Debug.LogError("CAUGHT ERROR in column " + dt.Columns[i] + ", value: " + row[i] + ", error: " + e.Message);
                     DebugPanel.Log("CAUGHT ERROR in column " + dt.Columns[i] + ", value: " + row[i] + ", error: " + e.Message);
                 }
-                
             }
+            
             dt.Rows.Add(dr);
         }
-        
-        DebugPanel.Log(" > CSV file reading successful");
-
         return dt;
     }
 
     private DataTable ConvertLocationStopsStringToDataTable()
     {
         DataTable dt = new DataTable();
-        string[] lines = K_RawData.all_stops_data.Split('\n');
+        string[] lines = StopsDataSource.Split('\n');
         string[] headers = lines[0].Split(',');
+
         foreach (string header in headers)
         {   
             dt.Columns.Add(header);
@@ -233,16 +249,13 @@ public class K_DatabaseManager
                 }
                 catch(Exception e)
                 {
-                    Debug.Log("CAUGHT ERROR in column " + dt.Columns[i] + ", value: " + row[i] + ", error: " + e.Message);
+                    Debug.LogError("CAUGHT ERROR in column " + dt.Columns[i] + ", value: " + row[i] + ", error: " + e.Message);
                     DebugPanel.Log("CAUGHT ERROR in column " + dt.Columns[i] + ", value: " + row[i] + ", error: " + e.Message);
                 }
                 
             }
             dt.Rows.Add(dr);
         }
-        
-        DebugPanel.Log(" > CSV file reading successful");
-
         return dt;
     }
     
@@ -251,48 +264,53 @@ public class K_DatabaseManager
         return filteredLegsList.Count;
     }
 
-    public void ApplyPathsFilter(List<TravelMode> modes, float minDepTime, float maxDepTime, float minTrDur, float maxTrDur, float minTrDist, float maxTrDist, float minAgentID, float maxAgentID)
+    public void ApplyPathsFilter(HashSet<TravelMode> travelModes, HashSet<CustomInterval> departureTimes, HashSet<CustomInterval> arrivalTimes,
+                HashSet<CustomInterval> travelDurations, float[] agentRange)
     {   
+        if(SceneManager.GetActiveScene().name.Equals("DummyScene")) return;
+
         filteredLegsList = new List<K_DatabaseLegData>();
-        minDepTime *= 3600f;
-        maxDepTime *= 3600f;
-        minTrDur *= 60f;
-        maxTrDur *= 60f;
+        List<K_DatabaseLegData> travelDurationsList = new List<K_DatabaseLegData>();
+        //float minTrDur = travelDurations[0] * 60f;
+        //float maxTrDur = travelDurations[1] * 60f;
+        
+        //TravelDurationBarChart travelDurationBarChart = TravelDurationBarChart.instance;
+        //if(travelDurationBarChart == null) Debug.LogError("TravelDurationBarChart instance is NULL");
+        
 
-        string modeString = "";
-        foreach(TravelMode m in modes)
-        {
-            modeString += ", " + TravelModeMap.TravelModeToString(m);
-        }
-
-        Debug.Log("Applying filter with: mode=" + modeString + ", depTimes=(" + minDepTime + ", " + maxDepTime + "), travelDurs=("
-             + minTrDur + ", " + maxTrDur + "), travelDists=(" + minTrDist + ", " + maxTrDist  + ")");
+        Debug.Log("Applying filter with: #modes=" + travelModes.Count + ", #departureTimes=" + departureTimes.Count + ", #arrivalTimes=" + arrivalTimes.Count
+             + ", #travelDuration=" + travelDurations.Count + ", agentIDs=(" + agentRange[0] + ", " + agentRange[1]  + ")");
 
         int nofTrips = -1;
         int nofLegs = 0;
         HashSet<int> agentsSet = new HashSet<int>();
-        float avgTravelTime = 0f;
+        float avgTravelDuration = 0f;
         foreach(K_DatabaseLegData leg in initialLegsList)
-        {
-            if(!modes.Contains(leg.travel_mode)) continue;
-            if(leg.departure_time < minDepTime || leg.departure_time > maxDepTime) continue;
-            if(leg.travel_time < minTrDur || leg.travel_time > maxTrDur) continue;
-            if(leg.person_id < minAgentID || leg.person_id > maxAgentID) continue;
+        {   
+            if(leg.person_id < agentRange[0] || leg.person_id > agentRange[1]) continue;
+            if(!travelModes.Contains(leg.travel_mode)) continue;
+            if(!DepartureTimeIntervalsContainValue(departureTimes, leg.departure_time)) continue;
+            if(!ArrivalTimeIntervalsContainValue(arrivalTimes, leg.arrival_time)) continue;
 
-            // TODO: filter by travel distance
+            travelDurationsList.Add(leg);
+
+            if(!TravelDurationIntervalsContainValue(travelDurations, leg.travel_time)) continue;
+
             agentsSet.Add(leg.person_id);
             nofLegs += 1;
-            avgTravelTime += leg.travel_time;
+            avgTravelDuration += leg.travel_time;
 
             filteredLegsList.Add(leg);
         }
-
-        K_InformationPanel infoPanel = GameObject.Find("InformationPanel").GetComponent<K_InformationPanel>();
-        infoPanel?.SetAllInformation(nofTrips, nofLegs, agentsSet.Count, avgTravelTime / nofLegs, 0);
+        //K_InformationPanel infoPanel = GameObject.Find("InformationPanel").GetComponent<K_InformationPanel>();
+        //infoPanel?.SetAllInformation(nofTrips, nofLegs, agentsSet.Count, avgTravelTime / nofLegs, 0);
         dataPathVisualizationManager.DestroyAllPaths();
-
-        DashboardManager dashboard = GameObject.Find("MapDashboardPanel").GetComponent<DashboardManager>();
+        K_InformationPanel infoPanel = GameObject.Find("StatisticsPanel").GetComponent<K_InformationPanel>();
+        infoPanel?.SetAllInformation(nofTrips, nofLegs, agentsSet.Count, avgTravelDuration / nofLegs, 0);
+        DashboardManager dashboard = GameObject.Find("StatisticsPanel").GetComponent<DashboardManager>();
         dashboard?.UpdateDatasetChart(filteredLegsList);
+
+        //travelDurationBarChart?.UpdateBarChart(travelDurationsList);
 
         Debug.Log("Applied filter -> total paths: " + initialLegsList.Count + ", filtered paths: " + filteredLegsList.Count);
     }
@@ -305,6 +323,39 @@ public class K_DatabaseManager
     public List<K_DatabaseStopData> GetLocationsStopsList()
     {
         return initialLocationStopsList;
+    }
+
+    private bool DepartureTimeIntervalsContainValue(HashSet<CustomInterval> h, float val)
+    {
+        foreach(CustomInterval i in h)
+        {   
+            if(i.start*3600 <= val && val < i.end*3600){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool ArrivalTimeIntervalsContainValue(HashSet<CustomInterval> h, float val)
+    {
+        foreach(CustomInterval i in h)
+        {   
+            if(i.start*3600 <= val && val < i.end*3600){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool TravelDurationIntervalsContainValue(HashSet<CustomInterval> h, float val)
+    {
+        foreach(CustomInterval i in h)
+        {   
+            if(i.start*60 <= val && val < i.end*60){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
