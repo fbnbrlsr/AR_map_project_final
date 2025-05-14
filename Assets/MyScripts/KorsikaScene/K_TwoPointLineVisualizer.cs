@@ -8,7 +8,7 @@ using UnityEngine;
     Creates a line between a start and end point
     The height of the respective end points represent the timestamp of the data
 */
-public class K_TwoPointLineVisualizer : ITwoPointVisualization
+public class K_TwoPointLineVisualizer
 {
     // Data reference
     private K_DatabaseLegData _leg;
@@ -23,7 +23,7 @@ public class K_TwoPointLineVisualizer : ITwoPointVisualization
     // Instances
     private CustomPoint startCustomPoint;
     private CustomPoint endCustomPoint;
-    private FadeLine fadeLine;
+    private K_FadeLine fadeLine;
     private bool isIntantiated;
 
     // Interaction parameters
@@ -32,13 +32,8 @@ public class K_TwoPointLineVisualizer : ITwoPointVisualization
     private K_PathInformationPanel informationPanel;
 
 
-    public void SetLegData(ILegData leg)
+    public void SetLegData(K_DatabaseLegData leg)
     {
-        if((Type) leg != typeof(K_DatabaseLegData))
-        {
-            Debug.LogError("MY ERROR: Parameter leg has the wrong type!");
-            return;
-        }
         this._leg = (K_DatabaseLegData) leg;
     }
 
@@ -67,7 +62,7 @@ public class K_TwoPointLineVisualizer : ITwoPointVisualization
         }
 
         GameObject lineInstance = GameObject.Instantiate(linePrefab);
-        fadeLine = new FadeLine(_leg.id, lineInstance, _leg.worldStartPoint, _leg.worldEndPoint);
+        fadeLine = new K_FadeLine(_leg.id, lineInstance, _leg.worldStartPoint, _leg.worldEndPoint);
         Vector2d origin = new Vector2d(_leg.origin_lat, _leg.origin_lon);
         Vector2d dest = new Vector2d(_leg.dest_lat, _leg.dest_lon);
         fadeLine.Update(_map.GeoToWorldPosition(origin, true), _map.GeoToWorldPosition(dest, true));

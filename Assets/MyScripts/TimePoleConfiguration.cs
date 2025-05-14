@@ -45,10 +45,14 @@ public class TimePoleConfiguration : MonoBehaviour
     float height25h;
     float height30h;
     float height35h;
+    Vector3 timePoleLocalPosition;
+    Vector3 timePoleLocalScale;
 
     void Start()
     {   
         map.OnUpdated += UpdateConfiguration;
+        timePoleLocalPosition = timePoleCylinder.transform.localPosition;
+        timePoleLocalScale = timePoleCylinder.transform.localScale;
 
         if(SceneManager.GetActiveScene().name.Equals("DummyScene")) return;
         
@@ -83,8 +87,8 @@ public class TimePoleConfiguration : MonoBehaviour
         height35h = SecondsToRealHeight(35*60*60f);
         
 
-        timePoleCylinder.transform.localScale = new Vector3(0.05f, (height35h-height0h)/2, 0.05f);
-        timePoleCylinder.transform.localPosition = new Vector3(0f, (height35h-height0h)/2, 0f);
+        timePoleCylinder.transform.localScale = new Vector3(timePoleLocalScale.x, (height35h-height0h)/2, timePoleLocalScale.x);
+        timePoleCylinder.transform.localPosition = new Vector3(timePoleLocalPosition.x, (height35h-height0h)/2, timePoleLocalPosition.z);
 
         timePoleLabel5h.transform.localPosition = new Vector3(timePoleLabel5h.transform.localPosition.x, height5h, timePoleLabel5h.transform.localPosition.z);
         timePoleLabel10h.transform.localPosition = new Vector3(timePoleLabel10h.transform.localPosition.x, height10h, timePoleLabel10h.transform.localPosition.z);

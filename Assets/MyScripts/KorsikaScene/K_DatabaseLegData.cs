@@ -6,7 +6,7 @@ using UnityEngine;
 using Mapbox.Unity.Utilities;
 using UnityEngine.SceneManagement;
 
-public class K_DatabaseLegData : ILegData
+public class K_DatabaseLegData
 {   
     public const int personIDLowerBound = 0;
     public const int personIDUpperBound = 1000000;
@@ -22,7 +22,7 @@ public class K_DatabaseLegData : ILegData
     public static float earliestTime = 0f; // maybe change to: float.MaxValue; 
     public static float latestTime = SceneManager.GetActiveScene().name.Equals("DummyScene") ? 88000f : 0f; 
     public static float minPointHeight = 0f;
-    public static float maxPointHeight = .25f;
+    public static float maxPointHeight = .1f;
     public static float minDuration = float.MaxValue;
     public static float maxDuration = 0f;
     public static AbstractMap _map;
@@ -161,7 +161,7 @@ public class K_DatabaseLegData : ILegData
         var scaleFactor = Mathf.Pow(2, _map.InitialZoom - _map.AbsoluteZoom);
         //Debug.Log("scaleFactor=" + scaleFactor + ", relativeScale=" + map.WorldRelativeScale + ", product=" + scaleFactor * map.WorldRelativeScale);
         var worldPos = Conversions.GeoToWorldPosition(latlon, _map.CenterMercator, _map.WorldRelativeScale * scaleFactor).ToVector3xz();
-        return worldPos / 10f * absoluteDistance / initAbsoluteDistance;
+        return worldPos * absoluteDistance / initAbsoluteDistance;
     }
 
     private float CalculateWorldHeight(float seconds)

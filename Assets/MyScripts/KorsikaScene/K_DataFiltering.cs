@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TS.DoubleSlider;
-using Unity.VisualScripting;
-using System;
+using UnityEngine.SceneManagement;
 
 public class K_DataFiltering : MonoBehaviour
 {
@@ -207,6 +205,7 @@ public class K_DataFiltering : MonoBehaviour
     {   
         Debug.Log("apply filters: travelModes=" + travelModes.Count + ", departureTimes=" + departureTimes.Count);
         UpdateSelectAllToggles();
+        if(SceneManager.GetActiveScene().name.Equals("DummyScene")) return;
         _databaseManager.ApplyPathsFilter(
                 travelModes, 
                 departureTimes,

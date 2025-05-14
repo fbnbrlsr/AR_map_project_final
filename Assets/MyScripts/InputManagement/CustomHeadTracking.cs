@@ -5,7 +5,7 @@ public class CustomHeadTracking
 {   
     public static Vector3 GetHeadPosition()
     {
-        Vector3 headPos = Vector3.zero;
+        Vector3 headPos = -2*Vector3.forward;
         if (XRSettings.isDeviceActive)
         {
             // Get the position and rotation of the XR HMD (headset)

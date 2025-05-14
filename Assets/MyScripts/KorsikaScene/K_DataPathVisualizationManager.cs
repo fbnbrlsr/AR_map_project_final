@@ -1,15 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Mapbox.Examples;
 using Mapbox.Unity.Map;
-using Mapbox.Unity.Utilities;
-using Mapbox.Utils;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public delegate void NewWindowSpawned();
 public delegate void InitializationFinishedEvent();
@@ -67,7 +60,7 @@ public class K_DataPathVisualizationManager : MonoBehaviour
         DynamicTimePlane.TimePlaneChanged += OnMapUpdated;
         abstractMap.OnUpdated += OnMapUpdated;
         //lineStyleDropdown.onValueChanged.AddListener(OnLineStyleChanged);
-        FadeLine.selectedMaterial = selectedLineMaterial;
+        K_FadeLine.selectedMaterial = selectedLineMaterial;
 
         showPathsButton.OnToggleButton += OnShowPathsButtonToggled;
 
@@ -86,7 +79,7 @@ public class K_DataPathVisualizationManager : MonoBehaviour
     {   
         if(spawnedPathsList != null)
         {   
-            foreach(ITwoPointVisualization p in spawnedPathsList)
+            foreach(K_TwoPointLineVisualizer p in spawnedPathsList)
             {
                 p.UpdateVisualization();
             } 
@@ -136,7 +129,7 @@ public class K_DataPathVisualizationManager : MonoBehaviour
         //showPathsButton.SetState(false);
         if(spawnedPathsList != null)
         {   
-            foreach(ITwoPointVisualization p in spawnedPathsList)
+            foreach(K_TwoPointLineVisualizer p in spawnedPathsList)
             {
                 p.DestroyPath();
             } 

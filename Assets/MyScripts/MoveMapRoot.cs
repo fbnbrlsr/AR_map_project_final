@@ -27,7 +27,7 @@ public class MoveMapRoot : MonoBehaviour
     {
         mapRootHandle.transform.rotation = Quaternion.LookRotation(Vector3.left);
 
-        lowerArrow.transform.localPosition = new Vector3(-5*Mathf.Sin(MapTilting.tiltAngleRad), -5*Mathf.Cos(MapTilting.tiltAngleRad), 0f);
+        lowerArrow.transform.localPosition = new Vector3(-0.65f*Mathf.Sin(MapTilting.tiltAngleRad), -0.65f*Mathf.Cos(MapTilting.tiltAngleRad), 0f);
     }
 
     void OnInputStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)

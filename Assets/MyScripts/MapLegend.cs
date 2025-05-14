@@ -40,8 +40,8 @@ public class MapLegend : MonoBehaviour
     {
         pathColorLegendInstance = GameObject.Instantiate(pathColorLegendPrefab);
         pathColorLegendInstance.transform.parent = mapHolder.transform;
-        pathColorLegendInstance.transform.localPosition = new Vector3(1.5f, 0.3f, 1f);
-        pathColorLegendInstance.transform.localScale = new Vector3(3f, 3f, 3f);
+        pathColorLegendInstance.transform.localPosition = new Vector3(0f, 0.3f, 0.5f);
+        pathColorLegendInstance.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         pathColorLegendInstance.transform.rotation = new Quaternion(0.382683426f,0f,0f,0.923879564f);
 
 

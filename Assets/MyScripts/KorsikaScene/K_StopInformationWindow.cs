@@ -51,9 +51,10 @@ public class K_StopInformationWindow
     private string GenerateText(string t)
     {
         string s = t.Split("\n")[0];
-        s += "\nLatitude: " + lat;
-        s += "\nLongitude: " + lon;
-        s += "\n#Stops: " + nof_stops;
+        //s += "\nLatitude: " + lat;
+        //s += "\nLongitude: " + lon;
+        string c = nof_stops == 1 ? "\n" + nof_stops + " stop" : "\n" + nof_stops + " stops";
+        s += c;
         return s;
     }
 

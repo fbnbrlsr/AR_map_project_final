@@ -22,11 +22,11 @@ public class Params_PanelStartingPositions
     {   
         if(name.Equals("MapControlsPanel"))
         {
-            return new WorldPositionParameters(new Vector3(3f,1f,2f), new Quaternion(0f,0.28f,0f,0.95f), Vector3.one);
+            return new WorldPositionParameters(new Vector3(0.5f,0f,0f), new Quaternion(0f,0.28f,0f,0.95f), Vector3.one);
         }
         else if(name.Equals("DataFilterPanel"))
         {
-            return new WorldPositionParameters(new Vector3(3.5f,3f,3.5f), new Quaternion(-0.25f,0.4f,0.1f,0.9f), Vector3.one);
+            return new WorldPositionParameters(new Vector3(1.5f,1.7f,2f), new Quaternion(-0.18f,0.17f,0.033f,0.96f), Vector3.one);
         }
         else if(name.Equals("CommentManagementPanel"))
         {
@@ -34,7 +34,7 @@ public class Params_PanelStartingPositions
         }
         else if(name.Equals("StatisticsPanel"))
         {
-            return new WorldPositionParameters(new Vector3(-5f,0.5f,3.5f), new Quaternion(0f,-0.5f,0f,0.9f), Vector3.one);
+            return new WorldPositionParameters(new Vector3(-1.5f,1.2f,2f), new Quaternion(-0.13f,-0.17f,-0.02f,0.97f), Vector3.one);
         }
         else if(name.Equals("CommentHistoryPanel"))
         {
@@ -46,7 +46,7 @@ public class Params_PanelStartingPositions
         }
         else if(name.Equals("DataTransformationsPanel") || name.Equals("BellBarParent"))
         {
-            return new WorldPositionParameters(new Vector3(3.5f,1.5f,4f), new Quaternion(0,0.25f,0,0.9f), Vector3.one);
+            return new WorldPositionParameters(new Vector3(1.5f,1.1f,2f), new Quaternion(0,0.25f,0,0.96f), Vector3.one);
         }
         else
         {   

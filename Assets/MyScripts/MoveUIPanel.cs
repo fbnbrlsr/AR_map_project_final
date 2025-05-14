@@ -7,7 +7,7 @@ using System;
 
 public class MoveUIPanel : MonoBehaviour
 {   
-    public float heightOffset = 0.1f;
+    public float heightOffset;
     [SerializeField] GameObject mapPanReferenceCube;
     [SerializeField] AbstractMap abstractMap;
     [SerializeField] GameObject UIPanelParentGO;
@@ -23,7 +23,6 @@ public class MoveUIPanel : MonoBehaviour
 //#if !UNITY_EDITOR
         UIPanelParentGO.transform.position = wpp.position;
         UIPanelParentGO.transform.rotation = wpp.rotation;
-        UIPanelParentGO.transform.position = wpp.position;
 //#endif
 
         parentTransform = UIPanelParentGO.transform;
@@ -74,7 +73,7 @@ public class MoveUIPanel : MonoBehaviour
         Vector3 panelPosition = UIPanelParentGO.transform.position;
         float zDistance = panelPosition.z - mapPanReferenceCube.transform.position.z;
         float mapPanReferenceCubeY = mapPanReferenceCube.transform.position.y - zDistance * Mathf.Sin(MapTilting.tiltAngleRad);
-        float minHeight = mapPanReferenceCubeY + heightOffset - UIPanelHandle.transform.localPosition.y;
+        float minHeight = mapPanReferenceCubeY + heightOffset - UIPanelParentGO.transform.localScale.y * UIPanelHandle.transform.localPosition.y;
 
         UIPanelParentGO.transform.position = new Vector3(panelPosition.x, Mathf.Max(panelPosition.y, minHeight), panelPosition.z);
     }

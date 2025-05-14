@@ -14,15 +14,12 @@ public class K_PathInformationPanel
     private Quaternion rotation;
     private K_DatabaseLegData leg;
     private static int id_c;
-    private int id;
 
 
     public K_PathInformationPanel(K_DatabaseLegData leg, GameObject prefab)
     {
         this.leg = leg;
         this.prefab = prefab;
-
-        this.id = id_c++;
     }
     
     public void Show(Vector3 worldPos, Vector3 headPos)
@@ -67,6 +64,18 @@ public class K_PathInformationPanel
         int seconds = input % 60;
         int minutes = (input - seconds)/60 % 60;
         int hours = (input - seconds - 60*minutes)/3600 % 60;
-        return hours + "h " + minutes + "m " + seconds + "s";
+
+        if(hours == 0 && minutes == 0)
+        {
+            return seconds + "s";
+        }
+        else if(hours == 0)
+        {
+            return minutes + "m " + seconds + "s";
+        }
+        else
+        {
+            return hours + "h " + minutes + "m " + seconds + "s";
+        }
     }
 }

@@ -95,7 +95,7 @@ public class K_TransitionalStopColumn : K_IStopColumnVisualization
         var scaleFactor = Mathf.Pow(2, _map.InitialZoom - _map.AbsoluteZoom);
         //Debug.Log("scaleFactor=" + scaleFactor + ", relativeScale=" + map.WorldRelativeScale + ", product=" + scaleFactor * map.WorldRelativeScale);
         var worldPos = Conversions.GeoToWorldPosition(latlon, _map.CenterMercator, _map.WorldRelativeScale * scaleFactor).ToVector3xz();
-        return worldPos / 10f * CustomReloadMap.GetReferenceDistance() / initAbsoluteDistance;
+        return worldPos * CustomReloadMap.GetReferenceDistance() / initAbsoluteDistance;
     }
 
     private Vector3 RotateByAngle(Vector3 v, float angle)

@@ -11,7 +11,7 @@ using UnityEngine.InputSystem.LowLevel;
 */
 public class DataPathVisualizationManager : MonoBehaviour
 {   
-    private DatabaseManager _databaseManager;
+    /*private DatabaseManager _databaseManager;
     private InputEventTypes inputEvents;
 
     // Visualization parameters
@@ -38,7 +38,7 @@ public class DataPathVisualizationManager : MonoBehaviour
     private PathType pathType;
 
     // Leg visualization
-    List<ITwoPointVisualization> twoPointPathList;
+    List<K_TwoPointLineVisualizer> twoPointPathList;
     private int spawnedPaths;
 
     void Start()
@@ -53,7 +53,7 @@ public class DataPathVisualizationManager : MonoBehaviour
         _databaseManager.Initialize(nof_paths);
 
         spawnedPaths = 0;
-        twoPointPathList = new List<ITwoPointVisualization>();
+        twoPointPathList = new List<K_TwoPointLineVisualizer>();
 
         infoText1.SetText("Paths in database:\n" + _databaseManager.GetNofPaths());
         infoText2.SetText("Paths spawned\n0");
@@ -80,7 +80,7 @@ public class DataPathVisualizationManager : MonoBehaviour
     {   
         if(twoPointPathList != null)
         {   
-            foreach(ITwoPointVisualization p in twoPointPathList)
+            foreach(K_TwoPointLineVisualizer p in twoPointPathList)
             {
                 p.UpdateVisualization();
             } 
@@ -157,6 +157,6 @@ public class DataPathVisualizationManager : MonoBehaviour
             return false;
         }
         
-    }
+    }*/
 
 }

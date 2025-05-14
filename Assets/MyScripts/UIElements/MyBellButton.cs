@@ -46,7 +46,7 @@ public class MyBellButton : MonoBehaviour, IMyButton
 
     private void Click_OnHandSingleIPinchStart(Vector3 fingerPos, Vector3 interactionPos, Quaternion initRot, GameObject targetObj, SpatialPointerKind touchKind)
     {
-        if(targetObj.transform.IsChildOf(bellInstance.transform))
+        if(targetObj.transform.IsChildOf(this.transform))
         {      
             isButtonOn = !isButtonOn;
             SetState(isButtonOn);

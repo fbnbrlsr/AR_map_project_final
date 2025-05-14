@@ -192,7 +192,6 @@ public class K_DatabaseManager
                 catch(Exception e)
                 {
                     Debug.LogError("CAUGHT ERROR in column " + dt.Columns[i] + ", value: " + row[i] + ", error: " + e.Message);
-                    DebugPanel.Log("CAUGHT ERROR in column " + dt.Columns[i] + ", value: " + row[i] + ", error: " + e.Message);
                 }
             }
             
@@ -250,7 +249,6 @@ public class K_DatabaseManager
                 catch(Exception e)
                 {
                     Debug.LogError("CAUGHT ERROR in column " + dt.Columns[i] + ", value: " + row[i] + ", error: " + e.Message);
-                    DebugPanel.Log("CAUGHT ERROR in column " + dt.Columns[i] + ", value: " + row[i] + ", error: " + e.Message);
                 }
                 
             }
