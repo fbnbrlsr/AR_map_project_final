@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6792164a73052f540b917d36e1ffe573
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 273628
+  packageName: Chain and Gear Generator
+  packageVersion: 1.2
+  assetPath: Assets/ChainGenerator/Demo/DemoScene.unity
+  uploadId: 663808

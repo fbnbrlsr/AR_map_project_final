@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/SampleScene.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 0
+    path: Assets/MyScenes/old_scenes/MapScene.unity
+    guid: 643636abed3f84576984d6ba92d72595
+  - enabled: 0
+    path: Assets/MyScenes/old_scenes/DatabaseConnection.unity
+    guid: fa97e7f2f43084aa09c32ca5a297b82b
+  - enabled: 0
+    path: Assets/Samples/XR Hands/1.4.0/Gestures/HandGestures.unity
+    guid: cd792f2302b8b6f4c9f264e2a4503e15
+  - enabled: 1
+    path: Assets/MyScenes/FullScene.unity
+    guid: 8989541c58aa94342a779f8aaf3c499d
+  - enabled: 0
+    path: Assets/MyScenes/old_scenes/SpeechToText.unity
+    guid: 3a35adf0bea124009b4ec7bc0fe4e24b
+  - enabled: 0
+    path: Assets/Samples/PolySpatial/Scenes/ProjectLauncher.unity
+    guid: 8b8b8ea8b8131004382443fe7d26cba7
+  - enabled: 0
+    path: Assets/MyScenes/old_scenes/SimpleTestScene.unity
+    guid: c4a7c3a97b58443e183fc47c879ca365
+  - enabled: 0
+    path: Assets/MyScenes/DummyScene.unity
+    guid: 70ae97af4ef884723b2c1de95598753a
+  - enabled: 0
+    path: Assets/Samples/PolySpatial/Scenes/MixedReality.unity
+    guid: 4062257bd31be4dc980c3241c72cef79
+  m_configObjects:
+    UnityEditor.XR.VisionOS.VisionOSSettings: {fileID: 11400000, guid: 10f3b915acd9345fdb07e8209d521520,
+      type: 2}
+    com.unity.input.settings: {fileID: 11400000, guid: 80ecbdf68dcec4e518a8e2f9d31defe1,
+      type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 660d0bc49ad5feb4e83f78a97d15b9fc,
+      type: 3}
+    com.unity.polyspatial.xr.xr_settings: {fileID: 11400000, guid: 4ada600351a854a2d8b37cbb67b07bc0,
+      type: 2}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 61436179be0d24be391a3943401de316,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 74d0c85749ad043bd8ca8b1791282495,
+      type: 2}
+  m_UseUCBPForAssetBundles: 0
