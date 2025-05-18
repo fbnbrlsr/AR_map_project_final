@@ -3012,7 +3012,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 462199488}
   mapRootHandle: {fileID: 1186434116}
-  _map: {fileID: 991891927}
+  map: {fileID: 991891927}
 --- !u!114 &462199490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7149,7 +7149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapRoot: {fileID: 1355538732}
-  _map: {fileID: 991891927}
+  map: {fileID: 991891927}
 --- !u!114 &1261639445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7162,7 +7162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ab107d041cd34098b8a4776c8b98d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _map: {fileID: 991891927}
+  map: {fileID: 991891927}
   panInteractionObject: {fileID: 1537455517}
   panSpeed: 500
 --- !u!114 &1261639447
@@ -9594,7 +9594,6 @@ MonoBehaviour:
   activityStopInformationWindowPrefab: {fileID: 3502929816363859007, guid: 8022b5dfbf1e54784b07ab5907169ccb,
     type: 3}
   globalRoot: {fileID: 462199488}
-  mapRoot: {fileID: 1355538733}
   showTransitionalStopsButton: {fileID: 684680299}
   showActivityStopsButton: {fileID: 1842954406}
 --- !u!1 &1757285439
